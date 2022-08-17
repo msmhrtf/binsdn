@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{41F72855-D923-4963-A881-680454E998D9}</ProjectGuid>
+    <ProjectGuid>{EC3B8EAC-8321-E27B-58B5-B5A48479D847}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -54,357 +54,257 @@
   </PropertyGroup>
   <ItemGroup>
     <Analyzer Include="/Applications/Visual Studio.app/Contents/MonoBundle/Addins/MonoDevelop.Unity/Analyzers/Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AI4Unity.Fuzzy.dll" />
+    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.Genetic.dll" />
+    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.Neuro.dll" />
+    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.Fuzzy.dll" />
+    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.MachineLearning.dll" />
+    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.Core.dll" />
+    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.Math.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets/scrupts/TouchControllerLeft.cs" />
-    <Compile Include="Assets/LocalNavMeshBuilder.cs" />
-    <Compile Include="Assets/wander.cs" />
-    <Compile Include="Assets/scrupts/SourceManager2.cs" />
-    <Compile Include="Assets/scrupts/SDNDraw.cs" />
-    <Compile Include="Assets/NavMeshComponents/Scripts/NavMeshModifierVolume.cs" />
-    <Compile Include="Assets/audio/SavWav.cs" />
-    <Compile Include="Assets/NavMeshComponents/Scripts/NavMeshSurface.cs" />
-    <Compile Include="Assets/scrupts/SubjectInfo.cs" />
-    <Compile Include="Assets/scrupts/HRTFcontainer.cs" />
-    <Compile Include="Assets/scrupts/sphereFollow.cs" />
-    <Compile Include="Assets/scrupts/FourthOrderFilter.cs" />
-    <Compile Include="Assets/scrupts/LazerScriptHead.cs" />
-    <Compile Include="Assets/scrupts/followThisObject.cs" />
-    <Compile Include="Assets/NavMeshSourceTag.cs" />
-    <Compile Include="Assets/scrupts/HRTFmanager_snowman.cs" />
-    <Compile Include="Assets/scrupts/storePointWithLazer_hoa.cs" />
-    <Compile Include="Assets/scrupts/followEar.cs" />
-    <Compile Include="Assets/_MK/MKGlow/Demo/Code/MK_DemoControl.cs" />
-    <Compile Include="Assets/scrupts/TypeForHOA.cs" />
-    <Compile Include="Assets/scrupts/reflectionPath.cs" />
-    <Compile Include="Assets/scrupts/Snowman.cs" />
-    <Compile Include="Assets/OscMessenger/UnityOSC/src/OSC/OSCPacket.cs" />
-    <Compile Include="Assets/OscMessenger/UnityOSC/src/OSC/OSCMessage.cs" />
-    <Compile Include="Assets/scrupts/LocalisationTest.cs" />
-    <Compile Include="Assets/NavMeshComponents/Scripts/NavMeshModifier.cs" />
-    <Compile Include="Assets/scrupts/reflectionFinder.cs" />
-    <Compile Include="Assets/scrupts/BiQuad.cs" />
-    <Compile Include="Assets/printExtents.cs" />
-    <Compile Include="Assets/OscMessenger/UnityOSC/src/OSC/OSCServer.cs" />
-    <Compile Include="Assets/scrupts/LazerScriptRight.cs" />
-    <Compile Include="Assets/audioread.cs" />
-    <Compile Include="Assets/navMeshMake.cs" />
-    <Compile Include="Assets/scrupts/SDN.cs" />
-    <Compile Include="Assets/scrupts/SourceManager.cs" />
-    <Compile Include="Assets/scrupts/audioRec.cs" />
-    <Compile Include="Assets/MoveTo.cs" />
-    <Compile Include="Assets/OscMessenger/UnityOSC/src/OSC/OSCBundle.cs" />
-    <Compile Include="Assets/scrupts/boundary.cs" />
-    <Compile Include="Assets/scrupts/storePointwithLazer.cs" />
-    <Compile Include="Assets/scrupts/cubeFollow.cs" />
-    <Compile Include="Assets/scrupts/fft___complex.cs" />
-    <Compile Include="Assets/scrupts/HRTFmanager.cs" />
-    <Compile Include="Assets/OscMessenger/OSCsender.cs" />
-    <Compile Include="Assets/OscMessenger/UnityOSC/src/OSCHandler.cs" />
-    <Compile Include="Assets/OscMessenger/UnityOSC/src/OSC/OSCClient.cs" />
-    <Compile Include="Assets/scrupts/ReverseNormals.cs" />
-    <Compile Include="Assets/scrupts/SliderControl.cs" />
-    <Compile Include="Assets/scrupts/resizeRoom.cs" />
-    <Compile Include="Assets/scrupts/SDN1.cs" />
-    <Compile Include="Assets/_MK/MKGlow/MKGlow.cs" />
-    <Compile Include="Assets/randomFX.cs" />
-    <Compile Include="Assets/scrupts/procCube.cs" />
-    <Compile Include="Assets/scrupts/WallFiltAndGain.cs" />
-    <Compile Include="Assets/scrupts/RoomManager.cs" />
-    <Compile Include="Assets/scrupts/TouchControllerRight.cs" />
-    <Compile Include="Assets/_MK/MKGlow/Demo/Code/MK_RotateObject.cs" />
-    <Compile Include="Assets/scrupts/GetAziEle.cs" />
-    <Compile Include="Assets/scrupts/LazerScriptLeft.cs" />
-    <Compile Include="Assets/NavMeshComponents/Scripts/NavMeshLink.cs" />
+    <Compile Include="Assets/test.cs" />
+    <Compile Include="Assets/SDNLib/Lib/WallFiltAndGain.cs" />
+    <Compile Include="Assets/SDNLib/SDNEnvConfig.cs" />
+    <Compile Include="Assets/SDNLib/audioRec.cs" />
+    <Compile Include="Assets/SDNLib/SourceBuilder.cs" />
+    <Compile Include="Assets/SDNLib/Lib/reflectionFinder.cs" />
+    <Compile Include="Assets/SDNLib/RoomBuilder.cs" />
+    <Compile Include="Assets/SDNLib/Lib/SDNDraw.cs" />
+    <Compile Include="Assets/SDNLib/Lib/SDN.cs" />
+    <Compile Include="Assets/SDNLib/Lib/HRTFmanager.cs" />
+    <Compile Include="Assets/SDNLib/boundary.cs" />
+    <Compile Include="Assets/SDNLib/Lib/CrossfadeBuffer.cs" />
+    <Compile Include="Assets/SDNLib/Lib/reflectionPath.cs" />
+    <Compile Include="Assets/SDNLib/Lib/FourthOrderFilter.cs" />
+    <Compile Include="Assets/SDNLib/Lib/BiQuad.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/Resources/subject152_txt/R08.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R15.txt" />
     <None Include="Assets/Resources/subject165_txt/triangles/triangles.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L05.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L13.txt" />
     <None Include="Assets/Resources/subject051_txt/L21.txt" />
     <None Include="Assets/Resources/subject165_txt/L15.txt" />
     <None Include="Assets/Resources/subject137_txt/R11.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R22.txt" />
     <None Include="Assets/Resources/subject044_txt/L19.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L25.txt" />
+    <None Include="Assets/Resources/subject050_txt/R11.txt" />
+    <None Include="Assets/Resources/subject050_txt/L10.txt" />
     <None Include="Assets/Resources/subject051_txt/R26.txt" />
     <None Include="Assets/Resources/subject017_txt/points/points.txt" />
+    <None Include="Assets/Resources/subject050_txt/L01.txt" />
     <None Include="Assets/Resources/subject017_txt/L21.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L17.txt" />
     <None Include="Assets/Resources/subject152_txt/L06.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R08.txt" />
+    <None Include="Assets/Resources/subject050_txt/R15.txt" />
     <None Include="Assets/Resources/subject044_txt/R26.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R26.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L03.txt" />
+    <None Include="Assets/Resources/subject050_txt/L13.txt" />
+    <None Include="Assets/Resources/subject050_txt/R22.txt" />
     <None Include="Assets/Resources/subject152_txt/L12.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L18.txt" />
     <None Include="Assets/Resources/subject051_txt/L17.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Render/MKGlowRender.shader" />
     <None Include="Assets/Resources/subject051_txt/triangles/triangles.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L12.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L25.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R03.txt" />
     <None Include="Assets/Resources/subject137_txt/R27.txt" />
-    <None Include="Assets/OscMessenger/Readme.txt" />
+    <None Include="Assets/Resources/subject050_txt/L15.txt" />
     <None Include="Assets/Resources/subject137_txt/L19.txt" />
     <None Include="Assets/Resources/subject044_txt/L18.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Illumin/MK_Illumin-Diffuse.shader" />
     <None Include="Assets/Resources/subject044_txt/points/points.txt" />
     <None Include="Assets/Resources/subject017_txt/L02.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R20.txt" />
     <None Include="Assets/Resources/subject165_txt/R14.txt" />
     <None Include="Assets/Resources/subject137_txt/R23.txt" />
     <None Include="Assets/Resources/subject152_txt/L01.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L11.txt" />
     <None Include="Assets/Resources/subject044_txt/R05.txt" />
     <None Include="Assets/Resources/subject137_txt/L03.txt" />
     <None Include="Assets/Resources/subject017_txt/L27.txt" />
     <None Include="Assets/Resources/subject017_txt/R26.txt" />
     <None Include="Assets/Resources/subject051_txt/L20.txt" />
     <None Include="Assets/Resources/subject152_txt/R24.txt" />
+    <None Include="Assets/Resources/subject050_txt/R18.txt" />
     <None Include="Assets/Resources/subject051_txt/R17.txt" />
     <None Include="Assets/Resources/subject137_txt/R09.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/triangles/triangles.txt" />
     <None Include="Assets/Resources/subject152_txt/R06.txt" />
     <None Include="Assets/Resources/subject137_txt/L16.txt" />
     <None Include="Assets/Resources/subject017_txt/R21.txt" />
     <None Include="Assets/Resources/subject165_txt/R19.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L09.txt" />
     <None Include="Assets/Resources/subject152_txt/L20.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Render/MKGlowBlurVHP.shader" />
     <None Include="Assets/Resources/subject137_txt/R15.txt" />
     <None Include="Assets/Resources/subject051_txt/L05.txt" />
     <None Include="Assets/Resources/subject051_txt/R11.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Transparent/MK_Transparent-DiffuseBumped.shader" />
+    <None Include="Assets/Resources/subject050_txt/R24.txt" />
     <None Include="Assets/Resources/subject165_txt/L26.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R21.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Particle/MK_Particle Add.shader" />
     <None Include="Assets/Resources/subject165_txt/R26.txt" />
     <None Include="Assets/Resources/subject165_txt/R23.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L26.txt" />
     <None Include="Assets/Resources/subject137_txt/R24.txt" />
     <None Include="Assets/Resources/subject137_txt/R04.txt" />
     <None Include="Assets/Resources/subject137_txt/L17.txt" />
     <None Include="Assets/Resources/subject017_txt/R23.txt" />
     <None Include="Assets/Resources/subject044_txt/L04.txt" />
+    <None Include="Assets/Resources/subject050_txt/L05.txt" />
     <None Include="Assets/Resources/subject051_txt/L27.txt" />
     <None Include="Assets/Resources/subject165_txt/L22.txt" />
-    <None Include="Assets/ai4unity/AForge.Fuzzy.dll" />
+    <None Include="Assets/RequiredLibs/ai4unity/AForge.Fuzzy.dll" />
     <None Include="Assets/Resources/subject017_txt/R07.txt" />
     <None Include="Assets/Resources/subject051_txt/R12.txt" />
     <None Include="Assets/Resources/subject051_txt/R18.txt" />
     <None Include="Assets/Resources/subject165_txt/R17.txt" />
     <None Include="Assets/Resources/subject152_txt/L11.txt" />
     <None Include="Assets/Resources/subject051_txt/L13.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L05.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L14.txt" />
+    <None Include="Assets/Resources/subject050_txt/R01.txt" />
     <None Include="Assets/Resources/subject051_txt/R16.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Sprites/MK_UnitySprites.cginc" />
+    <None Include="Assets/Resources/subject050_txt/R20.txt" />
     <None Include="Assets/Resources/subject152_txt/L22.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L20.txt" />
     <None Include="Assets/Resources/subject051_txt/R14.txt" />
     <None Include="Assets/Resources/subject044_txt/L22.txt" />
     <None Include="Assets/Resources/subject044_txt/R07.txt" />
+    <None Include="Assets/Resources/subject050_txt/R06.txt" />
     <None Include="Assets/Resources/subject017_txt/R25.txt" />
     <None Include="Assets/Resources/subject152_txt/L16.txt" />
+    <None Include="Assets/Resources/subject050_txt/R10.txt" />
     <None Include="Assets/Resources/subject044_txt/L20.txt" />
     <None Include="Assets/Resources/subject051_txt/R08.txt" />
     <None Include="Assets/Resources/subject137_txt/L11.txt" />
+    <None Include="Assets/Resources/subject050_txt/L12.txt" />
     <None Include="Assets/Resources/subject137_txt/R25.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Normal/MK_Normal-DiffuseBumped.shader" />
+    <None Include="Assets/Resources/subject050_txt/L08.txt" />
     <None Include="Assets/Resources/subject017_txt/R03.txt" />
     <None Include="Assets/Resources/subject051_txt/R20.txt" />
     <None Include="Assets/Resources/subject017_txt/L08.txt" />
+    <None Include="Assets/Resources/subject050_txt/R05.txt" />
     <None Include="Assets/Resources/subject152_txt/L10.txt" />
     <None Include="Assets/Resources/subject017_txt/L10.txt" />
     <None Include="Assets/Resources/subject152_txt/L14.txt" />
     <None Include="Assets/Resources/subject017_txt/L18.txt" />
     <None Include="Assets/Resources/subject051_txt/R04.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Render/MKGlowComposite.shader" />
+    <None Include="Assets/Resources/subject050_txt/R13.txt" />
     <None Include="Assets/Resources/subject165_txt/L19.txt" />
     <None Include="Assets/Resources/subject017_txt/R12.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Normal/MK_Normal-Glossy.shader" />
     <None Include="Assets/Resources/subject152_txt/R04.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R22.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R25.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R26.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Cutout/MK_Cutout-DiffuseBumpSpec.shader" />
     <None Include="Assets/Resources/subject165_txt/R08.txt" />
     <None Include="Assets/Resources/subject051_txt/L11.txt" />
     <None Include="Assets/Resources/subject165_txt/R24.txt" />
     <None Include="Assets/Resources/subject152_txt/R25.txt" />
     <None Include="Assets/Resources/subject051_txt/R07.txt" />
+    <None Include="Assets/Resources/subject050_txt/L14.txt" />
     <None Include="Assets/Resources/subject017_txt/R01.txt" />
     <None Include="Assets/Resources/subject165_txt/R20.txt" />
     <None Include="Assets/Resources/subject137_txt/triangles/triangles.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L22.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Sprites/MK_Sprite-Default.shader" />
+    <None Include="Assets/Resources/subject050_txt/L26.txt" />
     <None Include="Assets/Resources/subject044_txt/R16.txt" />
     <None Include="Assets/Resources/subject137_txt/R18.txt" />
     <None Include="Assets/Resources/subject137_txt/L18.txt" />
     <None Include="Assets/Resources/subject165_txt/R16.txt" />
     <None Include="Assets/Resources/subject165_txt/L09.txt" />
     <None Include="Assets/Resources/subject044_txt/R03.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R18.txt" />
+    <None Include="Assets/Resources/subject050_txt/points/points.txt" />
     <None Include="Assets/Resources/subject137_txt/L14.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L19.txt" />
     <None Include="Assets/Resources/subject137_txt/L02.txt" />
+    <None Include="Assets/Resources/subject050_txt/R12.txt" />
     <None Include="Assets/Resources/subject017_txt/R16.txt" />
     <None Include="Assets/Resources/subject165_txt/L16.txt" />
     <None Include="Assets/Resources/subject165_txt/L12.txt" />
     <None Include="Assets/Resources/subject137_txt/R07.txt" />
     <None Include="Assets/Resources/subject137_txt/R05.txt" />
     <None Include="Assets/Resources/subject152_txt/R13.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R08.txt" />
-    <None Include="Assets/ai4unity/AForge.Core.dll" />
-    <None Include="Assets/Resources/subject137_txt 1/L18.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L20.txt" />
+    <None Include="Assets/RequiredLibs/ai4unity/AForge.Core.dll" />
+    <None Include="Assets/Resources/subject050_txt/L20.txt" />
     <None Include="Assets/Resources/subject051_txt/R27.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L06.txt" />
     <None Include="Assets/Resources/subject165_txt/R03.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R20.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R15.txt" />
     <None Include="Assets/Resources/subject017_txt/R18.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R27.txt" />
     <None Include="Assets/Resources/subject137_txt/R26.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R12.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L27.txt" />
     <None Include="Assets/Resources/subject165_txt/points/points.txt" />
     <None Include="Assets/Resources/subject152_txt/L05.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R11.txt" />
     <None Include="Assets/Resources/subject051_txt/L23.txt" />
     <None Include="Assets/Resources/subject137_txt/R02.txt" />
     <None Include="Assets/Resources/subject044_txt/L14.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R16.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R09.txt" />
     <None Include="Assets/Resources/subject044_txt/R18.txt" />
     <None Include="Assets/Resources/subject044_txt/L06.txt" />
     <None Include="Assets/Resources/subject017_txt/L01.txt" />
     <None Include="Assets/Resources/subject137_txt/L07.txt" />
     <None Include="Assets/Resources/subject051_txt/L04.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R24.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L13.txt" />
+    <None Include="Assets/Resources/subject050_txt/L21.txt" />
     <None Include="Assets/Resources/subject152_txt/R09.txt" />
     <None Include="Assets/Resources/subject044_txt/R17.txt" />
-    <None Include="Assets/info_morgueroom.txt" />
     <None Include="Assets/Resources/subject165_txt/L07.txt" />
     <None Include="Assets/Resources/subject017_txt/L16.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R06.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R21.txt" />
     <None Include="Assets/Resources/subject137_txt/R22.txt" />
     <None Include="Assets/Resources/subject152_txt/R17.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L03.txt" />
     <None Include="Assets/Resources/subject051_txt/R24.txt" />
     <None Include="Assets/Resources/subject165_txt/R12.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L22.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R27.txt" />
     <None Include="Assets/Resources/subject152_txt/R18.txt" />
     <None Include="Assets/Resources/subject044_txt/L09.txt" />
     <None Include="Assets/Resources/subject044_txt/R11.txt" />
     <None Include="Assets/Resources/subject017_txt/L12.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R04.txt" />
     <None Include="Assets/Resources/subject165_txt/L27.txt" />
     <None Include="Assets/Resources/subject044_txt/L23.txt" />
+    <None Include="Assets/Resources/subject050_txt/R23.txt" />
     <None Include="Assets/Resources/subject137_txt/R08.txt" />
     <None Include="Assets/Resources/subject165_txt/L01.txt" />
     <None Include="Assets/Resources/subject165_txt/L20.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R13.txt" />
+    <None Include="Assets/Resources/subject050_txt/L23.txt" />
     <None Include="Assets/Resources/subject152_txt/L02.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R24.txt" />
     <None Include="Assets/Resources/subject017_txt/L05.txt" />
     <None Include="Assets/Resources/subject044_txt/R27.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R05.txt" />
     <None Include="Assets/Resources/subject137_txt/L06.txt" />
     <None Include="Assets/Resources/subject165_txt/R15.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R02.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L06.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R17.txt" />
+    <None Include="Assets/Resources/subject050_txt/L09.txt" />
     <None Include="Assets/Resources/subject017_txt/L07.txt" />
     <None Include="Assets/Resources/subject044_txt/L24.txt" />
+    <None Include="Assets/Resources/subject050_txt/R26.txt" />
     <None Include="Assets/Resources/subject017_txt/L26.txt" />
+    <None Include="Assets/Resources/subject050_txt/L02.txt" />
     <None Include="Assets/Resources/subject137_txt/L05.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Particle/MK_Particle AddMultiply.shader" />
     <None Include="Assets/Resources/subject152_txt/R12.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R05.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L23.txt" />
+    <None Include="Assets/Resources/subject050_txt/R07.txt" />
     <None Include="Assets/Resources/subject051_txt/R03.txt" />
     <None Include="Assets/Resources/subject165_txt/R10.txt" />
     <None Include="Assets/Resources/subject044_txt/R22.txt" />
     <None Include="Assets/Resources/subject017_txt/L11.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L01.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L24.txt" />
     <None Include="Assets/Resources/subject017_txt/R24.txt" />
     <None Include="Assets/Resources/subject137_txt/R12.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L10.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L02.txt" />
     <None Include="Assets/Resources/subject044_txt/triangles/triangles.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L09.txt" />
     <None Include="Assets/Resources/subject152_txt/L08.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R03.txt" />
     <None Include="Assets/Resources/subject165_txt/L18.txt" />
     <None Include="Assets/Resources/subject165_txt/L04.txt" />
     <None Include="Assets/Resources/subject152_txt/L18.txt" />
     <None Include="Assets/Resources/subject044_txt/R14.txt" />
     <None Include="Assets/Resources/subject044_txt/R13.txt" />
     <None Include="Assets/Resources/subject165_txt/L11.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R19.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R01.txt" />
     <None Include="Assets/Resources/subject152_txt/R10.txt" />
+    <None Include="Assets/Resources/subject050_txt/L16.txt" />
     <None Include="Assets/Resources/subject137_txt/R13.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Cutout/MK_Cutout-DiffuseBumped.shader" />
     <None Include="Assets/Resources/subject165_txt/L03.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R07.txt" />
     <None Include="Assets/Resources/subject044_txt/L26.txt" />
     <None Include="Assets/Resources/subject051_txt/L16.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R02.txt" />
     <None Include="Assets/Resources/subject152_txt/R11.txt" />
     <None Include="Assets/Resources/subject051_txt/points/points.txt" />
     <None Include="Assets/Resources/subject137_txt/L13.txt" />
     <None Include="Assets/Resources/subject165_txt/R25.txt" />
     <None Include="Assets/Resources/subject044_txt/L05.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L01.txt" />
     <None Include="Assets/Resources/subject051_txt/L10.txt" />
     <None Include="Assets/Resources/subject152_txt/L23.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R12.txt" />
+    <None Include="Assets/Resources/subject050_txt/R16.txt" />
     <None Include="Assets/Resources/subject165_txt/R09.txt" />
     <None Include="Assets/Resources/subject017_txt/L03.txt" />
     <None Include="Assets/Resources/subject051_txt/L12.txt" />
     <None Include="Assets/Resources/subject044_txt/L01.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R06.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Render/MKGlowBlur.shader" />
     <None Include="Assets/Resources/subject017_txt/L17.txt" />
     <None Include="Assets/Resources/subject017_txt/R11.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L15.txt" />
     <None Include="Assets/Resources/subject044_txt/L21.txt" />
     <None Include="Assets/Resources/subject051_txt/R10.txt" />
     <None Include="Assets/Resources/subject044_txt/R02.txt" />
     <None Include="Assets/Resources/subject017_txt/L25.txt" />
     <None Include="Assets/Resources/subject051_txt/L14.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R09.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R23.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R14.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L11.txt" />
     <None Include="Assets/Resources/subject137_txt/L27.txt" />
     <None Include="Assets/Resources/subject152_txt/R21.txt" />
-    <None Include="Assets/ai4unity/AI4Unity.Fuzzy.dll" />
+    <None Include="Assets/RequiredLibs/ai4unity/AI4Unity.Fuzzy.dll" />
     <None Include="Assets/Resources/subject051_txt/L07.txt" />
     <None Include="Assets/Resources/subject165_txt/R22.txt" />
     <None Include="Assets/Resources/subject165_txt/R06.txt" />
     <None Include="Assets/Resources/subject152_txt/R26.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R07.txt" />
     <None Include="Assets/Resources/subject044_txt/R24.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Cutout/MK_Cutout-Diffuse.shader" />
     <None Include="Assets/Resources/subject017_txt/L19.txt" />
     <None Include="Assets/Resources/subject017_txt/R19.txt" />
     <None Include="Assets/Resources/subject017_txt/L20.txt" />
     <None Include="Assets/Resources/subject051_txt/L01.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L16.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L08.txt" />
+    <None Include="Assets/Resources/subject050_txt/R19.txt" />
     <None Include="Assets/Resources/subject051_txt/R19.txt" />
     <None Include="Assets/Resources/subject137_txt/R19.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L07.txt" />
     <None Include="Assets/Resources/subject152_txt/R27.txt" />
     <None Include="Assets/Resources/subject137_txt/L08.txt" />
     <None Include="Assets/Resources/subject044_txt/L25.txt" />
@@ -413,43 +313,40 @@
     <None Include="Assets/Resources/subject017_txt/R08.txt" />
     <None Include="Assets/Resources/subject152_txt/R16.txt" />
     <None Include="Assets/Resources/subject044_txt/R25.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R23.txt" />
+    <None Include="Assets/Resources/subject050_txt/R02.txt" />
     <None Include="Assets/Resources/subject051_txt/R22.txt" />
     <None Include="Assets/Resources/subject044_txt/R10.txt" />
     <None Include="Assets/Resources/subject165_txt/L08.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Transparent/MK_Transparent-DiffuseBumpSpec.shader" />
     <None Include="Assets/Resources/subject051_txt/L03.txt" />
     <None Include="Assets/Resources/subject051_txt/L18.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R19.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L24.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L23.txt" />
+    <None Include="Assets/Resources/subject050_txt/R09.txt" />
     <None Include="Assets/Resources/subject017_txt/R02.txt" />
+    <None Include="Assets/Resources/subject050_txt/R21.txt" />
     <None Include="Assets/Resources/subject165_txt/L06.txt" />
     <None Include="Assets/Resources/subject044_txt/L15.txt" />
     <None Include="Assets/Resources/subject017_txt/R05.txt" />
     <None Include="Assets/Resources/subject165_txt/L02.txt" />
+    <None Include="Assets/Resources/subject050_txt/R17.txt" />
     <None Include="Assets/Resources/subject137_txt/L04.txt" />
     <None Include="Assets/Resources/subject152_txt/R02.txt" />
     <None Include="Assets/Resources/subject044_txt/L03.txt" />
     <None Include="Assets/Resources/subject152_txt/points/points.txt" />
     <None Include="Assets/Resources/subject152_txt/R03.txt" />
+    <None Include="Assets/Resources/subject050_txt/R08.txt" />
     <None Include="Assets/Resources/subject165_txt/R01.txt" />
     <None Include="Assets/Resources/subject137_txt/R14.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Transparent/MK_Transparent-Diffuse.shader" />
     <None Include="Assets/Resources/subject152_txt/L21.txt" />
     <None Include="Assets/Resources/subject152_txt/R23.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Illumin/MK_Illumin-DiffuseBumped.shader" />
     <None Include="Assets/Resources/subject152_txt/L24.txt" />
     <None Include="Assets/Resources/subject152_txt/R14.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L21.txt" />
     <None Include="Assets/Resources/subject152_txt/L15.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R25.txt" />
     <None Include="Assets/Resources/subject165_txt/R07.txt" />
     <None Include="Assets/Resources/subject044_txt/L17.txt" />
+    <None Include="Assets/Resources/subject050_txt/L17.txt" />
     <None Include="Assets/Resources/subject044_txt/R19.txt" />
     <None Include="Assets/Resources/subject137_txt/R20.txt" />
     <None Include="Assets/Resources/subject044_txt/R15.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/points/points.txt" />
+    <None Include="Assets/Resources/subject050_txt/R04.txt" />
     <None Include="Assets/Resources/subject165_txt/L05.txt" />
     <None Include="Assets/Resources/subject017_txt/L04.txt" />
     <None Include="Assets/Resources/subject137_txt/L23.txt" />
@@ -459,25 +356,19 @@
     <None Include="Assets/Resources/subject137_txt/L15.txt" />
     <None Include="Assets/Resources/subject165_txt/L21.txt" />
     <None Include="Assets/Resources/subject165_txt/L13.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L27.txt" />
     <None Include="Assets/Resources/subject165_txt/L23.txt" />
     <None Include="Assets/Resources/subject017_txt/L06.txt" />
     <None Include="Assets/Resources/subject017_txt/R15.txt" />
     <None Include="Assets/Resources/subject165_txt/R18.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/triangles/triangles.txt" />
     <None Include="Assets/Resources/subject137_txt/L26.txt" />
+    <None Include="Assets/Resources/subject050_txt/L24.txt" />
     <None Include="Assets/Resources/subject051_txt/R06.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L12.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R01.txt" />
     <None Include="Assets/Resources/subject051_txt/R13.txt" />
     <None Include="Assets/Resources/subject051_txt/L15.txt" />
     <None Include="Assets/Resources/subject137_txt/R17.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Normal/MK_Normal-DiffuseBumpSpec.shader" />
-    <None Include="Assets/Resources/subject152_txt 1/L26.txt" />
     <None Include="Assets/Resources/subject165_txt/R13.txt" />
     <None Include="Assets/Resources/subject044_txt/R01.txt" />
     <None Include="Assets/Resources/subject051_txt/R01.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L02.txt" />
     <None Include="Assets/Resources/subject051_txt/R15.txt" />
     <None Include="Assets/Resources/subject051_txt/L19.txt" />
     <None Include="Assets/Resources/subject044_txt/R09.txt" />
@@ -485,35 +376,30 @@
     <None Include="Assets/Resources/subject044_txt/L16.txt" />
     <None Include="Assets/Resources/subject137_txt/L21.txt" />
     <None Include="Assets/Resources/subject044_txt/R23.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L04.txt" />
     <None Include="Assets/Resources/subject017_txt/R17.txt" />
     <None Include="Assets/Resources/subject017_txt/L24.txt" />
     <None Include="Assets/Resources/subject165_txt/R05.txt" />
-    <None Include="Assets/ai4unity/AForge.Neuro.dll" />
+    <None Include="Assets/RequiredLibs/ai4unity/AForge.Neuro.dll" />
     <None Include="Assets/Resources/subject165_txt/L10.txt" />
     <None Include="Assets/Resources/subject044_txt/R21.txt" />
     <None Include="Assets/Resources/subject152_txt/L17.txt" />
     <None Include="Assets/Resources/subject044_txt/L07.txt" />
     <None Include="Assets/Resources/subject017_txt/L13.txt" />
-    <None Include="Assets/ai4unity/AForge.Math.dll" />
+    <None Include="Assets/RequiredLibs/ai4unity/AForge.Math.dll" />
     <None Include="Assets/Resources/subject152_txt/triangles/triangles.txt" />
+    <None Include="Assets/Resources/subject050_txt/L06.txt" />
     <None Include="Assets/Resources/subject152_txt/R01.txt" />
     <None Include="Assets/Resources/subject137_txt/L25.txt" />
     <None Include="Assets/Resources/subject165_txt/L25.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R10.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Transparent/MK_Transparent-Glossy.shader" />
     <None Include="Assets/Resources/subject137_txt/R01.txt" />
     <None Include="Assets/Resources/subject051_txt/L26.txt" />
     <None Include="Assets/Resources/subject044_txt/L27.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R13.txt" />
     <None Include="Assets/Resources/subject165_txt/R21.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Illumin/MK_Illumin-DiffuseBumpSpec.shader" />
     <None Include="Assets/Resources/subject137_txt/L01.txt" />
     <None Include="Assets/Resources/subject051_txt/L25.txt" />
     <None Include="Assets/Resources/subject137_txt/R10.txt" />
     <None Include="Assets/Resources/subject017_txt/L23.txt" />
     <None Include="Assets/Resources/subject152_txt/L26.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L15.txt" />
     <None Include="Assets/Resources/subject137_txt/L12.txt" />
     <None Include="Assets/Resources/subject152_txt/L04.txt" />
     <None Include="Assets/Resources/subject017_txt/R14.txt" />
@@ -521,46 +407,38 @@
     <None Include="Assets/Resources/subject044_txt/L13.txt" />
     <None Include="Assets/Resources/subject165_txt/L14.txt" />
     <None Include="Assets/Resources/subject152_txt/R19.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L19.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L16.txt" />
+    <None Include="Assets/Resources/subject050_txt/R27.txt" />
     <None Include="Assets/Resources/subject051_txt/R23.txt" />
     <None Include="Assets/Resources/subject152_txt/L25.txt" />
-    <None Include="Assets/ai4unity/AForge.Genetic.dll" />
+    <None Include="Assets/RequiredLibs/ai4unity/AForge.Genetic.dll" />
     <None Include="Assets/Resources/subject152_txt/L27.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L04.txt" />
     <None Include="Assets/Resources/subject152_txt/L19.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L21.txt" />
     <None Include="Assets/Resources/subject165_txt/L24.txt" />
     <None Include="Assets/Resources/subject044_txt/L11.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R18.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R11.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R14.txt" />
+    <None Include="Assets/Resources/subject050_txt/triangles/triangles.txt" />
+    <None Include="Assets/Resources/subject050_txt/L04.txt" />
+    <None Include="Assets/Resources/subject050_txt/R03.txt" />
     <None Include="Assets/Resources/subject017_txt/R13.txt" />
     <None Include="Assets/Resources/subject137_txt/points/points.txt" />
     <None Include="Assets/Resources/subject044_txt/R20.txt" />
     <None Include="Assets/Resources/subject044_txt/L08.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Illumin/MK_Illumin-Glossy.shader" />
     <None Include="Assets/Resources/subject165_txt/R02.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R04.txt" />
     <None Include="Assets/Resources/subject044_txt/R06.txt" />
     <None Include="Assets/Resources/subject137_txt/R21.txt" />
     <None Include="Assets/Resources/subject137_txt/L24.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L14.txt" />
     <None Include="Assets/Resources/subject165_txt/R04.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Sprites/MK_Sprite-Diffuse.shader" />
-    <None Include="Assets/Resources/subject152_txt 1/R10.txt" />
+    <None Include="Assets/Resources/subject050_txt/L03.txt" />
     <None Include="Assets/Resources/subject044_txt/R04.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Particle/MK_Particle Multiply.shader" />
     <None Include="Assets/Resources/subject051_txt/R02.txt" />
+    <None Include="Assets/Resources/subject050_txt/L22.txt" />
     <None Include="Assets/Resources/subject137_txt/L09.txt" />
     <None Include="Assets/Resources/subject017_txt/R09.txt" />
     <None Include="Assets/Resources/subject017_txt/L15.txt" />
     <None Include="Assets/Resources/subject044_txt/L10.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Particle/MK_Particle Alpha Blend.shader" />
     <None Include="Assets/Resources/subject017_txt/L22.txt" />
     <None Include="Assets/Resources/subject137_txt/L20.txt" />
+    <None Include="Assets/Resources/subject050_txt/R25.txt" />
     <None Include="Assets/Resources/subject137_txt/R06.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Cutout/MK_Cutout-Glossy.shader" />
     <None Include="Assets/Resources/subject017_txt/R22.txt" />
     <None Include="Assets/Resources/subject165_txt/R11.txt" />
     <None Include="Assets/Resources/subject017_txt/R27.txt" />
@@ -570,38 +448,37 @@
     <None Include="Assets/Resources/subject137_txt/L22.txt" />
     <None Include="Assets/Resources/subject017_txt/R20.txt" />
     <None Include="Assets/Resources/subject051_txt/L24.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L17.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/R16.txt" />
+    <None Include="Assets/Resources/subject050_txt/L27.txt" />
     <None Include="Assets/Resources/subject137_txt/R16.txt" />
+    <None Include="Assets/Resources/subject050_txt/L11.txt" />
     <None Include="Assets/Resources/subject051_txt/L02.txt" />
     <None Include="Assets/Resources/subject017_txt/L14.txt" />
     <None Include="Assets/Resources/subject165_txt/L17.txt" />
-    <None Include="Assets/_MK/MKGlow/Shader/Variants/Normal/MK_Normal-Diffuse.shader" />
     <None Include="Assets/Resources/subject152_txt/R15.txt" />
     <None Include="Assets/Resources/subject051_txt/R21.txt" />
-    <None Include="Assets/ai4unity/AForge.MachineLearning.dll" />
+    <None Include="Assets/RequiredLibs/ai4unity/AForge.MachineLearning.dll" />
     <None Include="Assets/Resources/subject152_txt/L03.txt" />
     <None Include="Assets/Resources/subject017_txt/R10.txt" />
     <None Include="Assets/Resources/subject051_txt/R25.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L07.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/L08.txt" />
     <None Include="Assets/Resources/subject051_txt/R05.txt" />
     <None Include="Assets/Resources/subject044_txt/R12.txt" />
     <None Include="Assets/Resources/subject165_txt/R27.txt" />
     <None Include="Assets/Resources/subject152_txt/R22.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/R17.txt" />
     <None Include="Assets/Resources/subject017_txt/R06.txt" />
     <None Include="Assets/Resources/subject017_txt/triangles/triangles.txt" />
+    <None Include="Assets/Resources/subject050_txt/R14.txt" />
+    <None Include="Assets/Resources/subject050_txt/L25.txt" />
     <None Include="Assets/Resources/subject017_txt/R04.txt" />
-    <None Include="Assets/Resources/subject137_txt 1/L10.txt" />
+    <None Include="Assets/Resources/subject050_txt/L19.txt" />
     <None Include="Assets/Resources/subject152_txt/L07.txt" />
-    <None Include="Assets/Resources/subject152_txt 1/points/points.txt" />
     <None Include="Assets/Resources/subject137_txt/R03.txt" />
     <None Include="Assets/Resources/subject044_txt/L02.txt" />
     <None Include="Assets/Resources/subject152_txt/R05.txt" />
     <None Include="Assets/Resources/subject137_txt/L10.txt" />
+    <None Include="Assets/Resources/subject050_txt/L07.txt" />
     <None Include="Assets/Resources/subject017_txt/L09.txt" />
     <None Include="Assets/Resources/subject152_txt/L13.txt" />
+    <None Include="Assets/Resources/subject050_txt/L18.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -848,34 +725,28 @@
       <HintPath>/Applications/Unity/Hub/Editor/2021.3.3f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.UnityConnectModule.dll</HintPath>
     </Reference>
     <Reference Include="AForge.Fuzzy">
-      <HintPath>Assets/ai4unity/AForge.Fuzzy.dll</HintPath>
+      <HintPath>Assets/RequiredLibs/ai4unity/AForge.Fuzzy.dll</HintPath>
     </Reference>
     <Reference Include="AForge.MachineLearning">
-      <HintPath>Assets/ai4unity/AForge.MachineLearning.dll</HintPath>
-    </Reference>
-    <Reference Include="Pathfinding.Ionic.Zip.Reduced">
-      <HintPath>Assets/AstarPathfindingProject/Plugins/DotNetZip/Pathfinding.Ionic.Zip.Reduced.dll</HintPath>
+      <HintPath>Assets/RequiredLibs/ai4unity/AForge.MachineLearning.dll</HintPath>
     </Reference>
     <Reference Include="AForge.Core">
-      <HintPath>Assets/ai4unity/AForge.Core.dll</HintPath>
+      <HintPath>Assets/RequiredLibs/ai4unity/AForge.Core.dll</HintPath>
     </Reference>
     <Reference Include="AI4Unity.Fuzzy">
-      <HintPath>Assets/ai4unity/AI4Unity.Fuzzy.dll</HintPath>
+      <HintPath>Assets/RequiredLibs/ai4unity/AI4Unity.Fuzzy.dll</HintPath>
     </Reference>
     <Reference Include="AForge.Neuro">
-      <HintPath>Assets/ai4unity/AForge.Neuro.dll</HintPath>
+      <HintPath>Assets/RequiredLibs/ai4unity/AForge.Neuro.dll</HintPath>
     </Reference>
     <Reference Include="AForge.Math">
-      <HintPath>Assets/ai4unity/AForge.Math.dll</HintPath>
+      <HintPath>Assets/RequiredLibs/ai4unity/AForge.Math.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library/PackageCache/com.unity.nuget.newtonsoft-json@3.0.2/Runtime/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="AForge.Genetic">
-      <HintPath>Assets/ai4unity/AForge.Genetic.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.ProtocolBuffers">
-      <HintPath>Assets/Plugins/Google.ProtocolBuffers.dll</HintPath>
+      <HintPath>Assets/RequiredLibs/ai4unity/AForge.Genetic.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>/Applications/Unity/Hub/Editor/2021.3.3f1/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
@@ -1272,69 +1143,53 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{B462BB01-D935-BB4D-E886-CD56D74CA65A}</Project>
-      <Name>Assembly-CSharp-firstpass</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.VSCode.Editor.csproj">
-      <Project>{EA657F7A-4B9A-A310-D835-2CFF83C14062}</Project>
+      <Project>{F7635291-C028-D260-9226-662BDB5B4191}</Project>
       <Name>Unity.VSCode.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Services.Core.Analytics.csproj">
+      <Project>{3F0D8E83-C1A3-B2A4-C3E6-6CBAF964EF30}</Project>
+      <Name>Unity.Services.Core.Analytics</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEngine.XR.LegacyInputHelpers.csproj">
+      <Project>{1F233119-161C-41A5-6AE5-6E8C605D6211}</Project>
+      <Name>UnityEngine.XR.LegacyInputHelpers</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.Editor.csproj">
-      <Project>{A7A60D39-009E-2AB3-8A2D-ABAD31920D9E}</Project>
+      <Project>{469569A4-E6DA-3670-A81B-A7405127A146}</Project>
       <Name>Unity.TextMeshPro.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Services.Core.Environments.csproj">
+      <Project>{B3603636-E8C7-CB3D-83BD-6FFC9C167C6C}</Project>
+      <Name>Unity.Services.Core.Environments</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.VisualStudio.Editor.csproj">
-      <Project>{153B0276-398F-F2DD-D1A8-788A09A625F8}</Project>
+      <Project>{0E936DBA-E0C5-A8AC-99C8-7F350ABAA8BC}</Project>
       <Name>Unity.VisualStudio.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="PackageToolsEditor.csproj">
-      <Project>{4526A0C9-0852-A91C-01C0-94F3659F37C5}</Project>
-      <Name>PackageToolsEditor</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.csproj">
-      <Project>{4AA3C77D-D408-4DA9-987A-FF8B72E81239}</Project>
+      <Project>{95B0746E-2F5F-4CC9-CD5B-7BDEA959FA0F}</Project>
       <Name>Unity.TextMeshPro</Name>
     </ProjectReference>
+    <ProjectReference Include="UnityEditor.XR.LegacyInputHelpers.csproj">
+      <Project>{181C7646-1A28-4FA7-63CD-F67C8D02F459}</Project>
+      <Name>UnityEditor.XR.LegacyInputHelpers</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.PlasticSCM.Editor.csproj">
-      <Project>{D6D2EEEA-CBD0-1B54-7BB6-B2FFAD2D0D36}</Project>
+      <Project>{04B077B0-E6E7-E572-45B4-AF72BC134F12}</Project>
       <Name>Unity.PlasticSCM.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="UnityEditor.SpatialTracking.csproj">
+      <Project>{B722AAB7-74E0-724C-A070-94184C10DA21}</Project>
+      <Name>UnityEditor.SpatialTracking</Name>
+    </ProjectReference>
     <ProjectReference Include="UnityEngine.SpatialTracking.csproj">
-      <Project>{B954C7D6-B398-76F9-30D9-57A3F92E9112}</Project>
+      <Project>{4EA94EC0-E183-F2B0-D2DA-337DD9EAC319}</Project>
       <Name>UnityEngine.SpatialTracking</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Services.Core.csproj">
-      <Project>{4DE139EA-1028-8293-AA61-5AFDDCB4C01C}</Project>
+      <Project>{F8A83440-C0B5-10E1-2785-E11B8124AA74}</Project>
       <Name>Unity.Services.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Services.Core.Analytics.csproj">
-      <Project>{07A656EC-459F-8954-4DB0-4270603A7982}</Project>
-      <Name>Unity.Services.Core.Analytics</Name>
-    </ProjectReference>
-    <ProjectReference Include="AstarPathfindingProject.csproj">
-      <Project>{CB021524-682E-E471-A83F-74A65FC4645D}</Project>
-      <Name>AstarPathfindingProject</Name>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.XR.LegacyInputHelpers.csproj">
-      <Project>{73B55D31-2A0B-50B6-93D0-A894DA5A1811}</Project>
-      <Name>UnityEngine.XR.LegacyInputHelpers</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Services.Core.Environments.csproj">
-      <Project>{D8FF7DA4-C4B4-CA18-ACA9-69ED6D8F8FD5}</Project>
-      <Name>Unity.Services.Core.Environments</Name>
-    </ProjectReference>
-    <ProjectReference Include="UnityEditor.XR.LegacyInputHelpers.csproj">
-      <Project>{FB45FCCC-CB01-18BD-EA0F-F4A73D2AB129}</Project>
-      <Name>UnityEditor.XR.LegacyInputHelpers</Name>
-    </ProjectReference>
-    <ProjectReference Include="AstarPathfindingProjectEditor.csproj">
-      <Project>{8FB6D57D-43C4-57FA-1CB5-BC19ADF6270B}</Project>
-      <Name>AstarPathfindingProjectEditor</Name>
-    </ProjectReference>
-    <ProjectReference Include="UnityEditor.SpatialTracking.csproj">
-      <Project>{CFB1F2BD-AD8A-A4D3-0104-8CCDFC9AAFC5}</Project>
-      <Name>UnityEditor.SpatialTracking</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

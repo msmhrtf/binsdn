@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{C384B49E-B0CB-D5FE-D77F-AEF300F7913D}</ProjectGuid>
+    <ProjectGuid>{4129E83E-DAC7-6AD9-040B-EB2F0E66588A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
@@ -54,28 +54,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Analyzer Include="/Applications/Visual Studio.app/Contents/MonoBundle/Addins/MonoDevelop.Unity/Analyzers/Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AI4Unity.Fuzzy.dll" />
+    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.Genetic.dll" />
+    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.Neuro.dll" />
+    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.Fuzzy.dll" />
+    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.MachineLearning.dll" />
+    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.Core.dll" />
+    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.Math.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets/Editor/ImageEffects/DepthOfFieldEditor.cs" />
-    <Compile Include="Assets/NavMeshComponents/Editor/NavMeshSurfaceEditor.cs" />
-    <Compile Include="Assets/Editor/ImageEffects/NoiseAndGrainEditor.cs" />
-    <Compile Include="Assets/Editor/ImageEffects/ColorCorrectionCurvesEditor.cs" />
-    <Compile Include="Assets/Editor/ImageEffects/BloomEditor.cs" />
-    <Compile Include="Assets/_MK/MKGlow/Editor/MKGlowEditor.cs" />
-    <Compile Include="Assets/NavMeshComponents/Editor/NavMeshModifierVolumeEditor.cs" />
-    <Compile Include="Assets/Editor/ImageEffects/ColorCorrectionLookupEditor.cs" />
-    <Compile Include="Assets/Editor/ImageEffects/VignetteAndChromaticAberrationEditor.cs" />
-    <Compile Include="Assets/Editor/ImageEffects/TonemappingEditor.cs" />
-    <Compile Include="Assets/Editor/ImageEffects/BloomAndFlaresEditor.cs" />
-    <Compile Include="Assets/Editor/ImageEffects/EdgeDetectionEditor.cs" />
-    <Compile Include="Assets/Editor/ImageEffects/AntialiasingEditor.cs" />
-    <Compile Include="Assets/NavMeshComponents/Editor/NavMeshModifierEditor.cs" />
-    <Compile Include="Assets/NavMeshComponents/Editor/NavMeshComponentsGUIUtility.cs" />
-    <Compile Include="Assets/Editor/ImageEffects/CameraMotionBlurEditor.cs" />
-    <Compile Include="Assets/Editor/ImageEffects/SunShaftsEditor.cs" />
-    <Compile Include="Assets/Editor/ImageEffects/DepthOfFieldDeprecatedEditor.cs" />
-    <Compile Include="Assets/OscMessenger/UnityOSC/src/Editor/OSCHelper.cs" />
-    <Compile Include="Assets/NavMeshComponents/Editor/NavMeshLinkEditor.cs" />
+    <Compile Include="Assets/Editor/Wall_class.cs" />
+    <Compile Include="Assets/Editor/Source_class.cs" />
+    <Compile Include="Assets/Editor/Room_class.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -337,40 +327,37 @@
       <HintPath>Library/PackageCache/com.unity.collab-proxy@1.17.1/Lib/Editor/PlasticSCM/Unity.Plastic.Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="AForge.Fuzzy">
-      <HintPath>Assets/ai4unity/AForge.Fuzzy.dll</HintPath>
+      <HintPath>Assets/RequiredLibs/ai4unity/AForge.Fuzzy.dll</HintPath>
+    </Reference>
+    <Reference Include="Parallel">
+      <HintPath>Assets/RequiredLibs/Parallel/Plugins/Parallel.dll</HintPath>
     </Reference>
     <Reference Include="AForge.MachineLearning">
-      <HintPath>Assets/ai4unity/AForge.MachineLearning.dll</HintPath>
+      <HintPath>Assets/RequiredLibs/ai4unity/AForge.MachineLearning.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Plastic.Antlr3.Runtime">
       <HintPath>Library/PackageCache/com.unity.collab-proxy@1.17.1/Lib/Editor/PlasticSCM/Unity.Plastic.Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Pathfinding.Ionic.Zip.Reduced">
-      <HintPath>Assets/AstarPathfindingProject/Plugins/DotNetZip/Pathfinding.Ionic.Zip.Reduced.dll</HintPath>
-    </Reference>
     <Reference Include="AForge.Core">
-      <HintPath>Assets/ai4unity/AForge.Core.dll</HintPath>
+      <HintPath>Assets/RequiredLibs/ai4unity/AForge.Core.dll</HintPath>
     </Reference>
     <Reference Include="AI4Unity.Fuzzy">
-      <HintPath>Assets/ai4unity/AI4Unity.Fuzzy.dll</HintPath>
+      <HintPath>Assets/RequiredLibs/ai4unity/AI4Unity.Fuzzy.dll</HintPath>
     </Reference>
     <Reference Include="log4netPlastic">
       <HintPath>Library/PackageCache/com.unity.collab-proxy@1.17.1/Lib/Editor/PlasticSCM/log4netPlastic.dll</HintPath>
     </Reference>
     <Reference Include="AForge.Neuro">
-      <HintPath>Assets/ai4unity/AForge.Neuro.dll</HintPath>
+      <HintPath>Assets/RequiredLibs/ai4unity/AForge.Neuro.dll</HintPath>
     </Reference>
     <Reference Include="AForge.Math">
-      <HintPath>Assets/ai4unity/AForge.Math.dll</HintPath>
+      <HintPath>Assets/RequiredLibs/ai4unity/AForge.Math.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library/PackageCache/com.unity.nuget.newtonsoft-json@3.0.2/Runtime/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="AForge.Genetic">
-      <HintPath>Assets/ai4unity/AForge.Genetic.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.ProtocolBuffers">
-      <HintPath>Assets/Plugins/Google.ProtocolBuffers.dll</HintPath>
+      <HintPath>Assets/RequiredLibs/ai4unity/AForge.Genetic.dll</HintPath>
     </Reference>
     <Reference Include="unityplastic">
       <HintPath>Library/PackageCache/com.unity.collab-proxy@1.17.1/Lib/Editor/PlasticSCM/unityplastic.dll</HintPath>
@@ -773,85 +760,65 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{B462BB01-D935-BB4D-E886-CD56D74CA65A}</Project>
-      <Name>Assembly-CSharp-firstpass</Name>
-    </ProjectReference>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{41F72855-D923-4963-A881-680454E998D9}</Project>
+      <Project>{EC3B8EAC-8321-E27B-58B5-B5A48479D847}</Project>
       <Name>Assembly-CSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="Assembly-CSharp-Editor-firstpass.csproj">
-      <Project>{9F3A83D3-14AC-95D4-4CE0-3D7BA9CAE648}</Project>
-      <Name>Assembly-CSharp-Editor-firstpass</Name>
-    </ProjectReference>
     <ProjectReference Include="UnityEngine.TestRunner.csproj">
-      <Project>{2C3D6ADA-76E7-BC9B-30C5-B4117CE01E64}</Project>
+      <Project>{90273979-1A8D-834D-9194-17B223FD9433}</Project>
       <Name>UnityEngine.TestRunner</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEditor.TestRunner.csproj">
-      <Project>{B4EB2793-7F19-4771-A862-92B62C515747}</Project>
+      <Project>{59F72639-6B8B-8CC8-3FFE-04C9F12D68E1}</Project>
       <Name>UnityEditor.TestRunner</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.VSCode.Editor.csproj">
-      <Project>{EA657F7A-4B9A-A310-D835-2CFF83C14062}</Project>
+      <Project>{F7635291-C028-D260-9226-662BDB5B4191}</Project>
       <Name>Unity.VSCode.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Services.Core.Analytics.csproj">
+      <Project>{3F0D8E83-C1A3-B2A4-C3E6-6CBAF964EF30}</Project>
+      <Name>Unity.Services.Core.Analytics</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEngine.XR.LegacyInputHelpers.csproj">
+      <Project>{1F233119-161C-41A5-6AE5-6E8C605D6211}</Project>
+      <Name>UnityEngine.XR.LegacyInputHelpers</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.Editor.csproj">
-      <Project>{A7A60D39-009E-2AB3-8A2D-ABAD31920D9E}</Project>
+      <Project>{469569A4-E6DA-3670-A81B-A7405127A146}</Project>
       <Name>Unity.TextMeshPro.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Services.Core.Environments.csproj">
+      <Project>{B3603636-E8C7-CB3D-83BD-6FFC9C167C6C}</Project>
+      <Name>Unity.Services.Core.Environments</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.VisualStudio.Editor.csproj">
-      <Project>{153B0276-398F-F2DD-D1A8-788A09A625F8}</Project>
+      <Project>{0E936DBA-E0C5-A8AC-99C8-7F350ABAA8BC}</Project>
       <Name>Unity.VisualStudio.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="PackageToolsEditor.csproj">
-      <Project>{4526A0C9-0852-A91C-01C0-94F3659F37C5}</Project>
-      <Name>PackageToolsEditor</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.csproj">
-      <Project>{4AA3C77D-D408-4DA9-987A-FF8B72E81239}</Project>
+      <Project>{95B0746E-2F5F-4CC9-CD5B-7BDEA959FA0F}</Project>
       <Name>Unity.TextMeshPro</Name>
     </ProjectReference>
+    <ProjectReference Include="UnityEditor.XR.LegacyInputHelpers.csproj">
+      <Project>{181C7646-1A28-4FA7-63CD-F67C8D02F459}</Project>
+      <Name>UnityEditor.XR.LegacyInputHelpers</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.PlasticSCM.Editor.csproj">
-      <Project>{D6D2EEEA-CBD0-1B54-7BB6-B2FFAD2D0D36}</Project>
+      <Project>{04B077B0-E6E7-E572-45B4-AF72BC134F12}</Project>
       <Name>Unity.PlasticSCM.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="UnityEditor.SpatialTracking.csproj">
+      <Project>{B722AAB7-74E0-724C-A070-94184C10DA21}</Project>
+      <Name>UnityEditor.SpatialTracking</Name>
+    </ProjectReference>
     <ProjectReference Include="UnityEngine.SpatialTracking.csproj">
-      <Project>{B954C7D6-B398-76F9-30D9-57A3F92E9112}</Project>
+      <Project>{4EA94EC0-E183-F2B0-D2DA-337DD9EAC319}</Project>
       <Name>UnityEngine.SpatialTracking</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Services.Core.csproj">
-      <Project>{4DE139EA-1028-8293-AA61-5AFDDCB4C01C}</Project>
+      <Project>{F8A83440-C0B5-10E1-2785-E11B8124AA74}</Project>
       <Name>Unity.Services.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Services.Core.Analytics.csproj">
-      <Project>{07A656EC-459F-8954-4DB0-4270603A7982}</Project>
-      <Name>Unity.Services.Core.Analytics</Name>
-    </ProjectReference>
-    <ProjectReference Include="AstarPathfindingProject.csproj">
-      <Project>{CB021524-682E-E471-A83F-74A65FC4645D}</Project>
-      <Name>AstarPathfindingProject</Name>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.XR.LegacyInputHelpers.csproj">
-      <Project>{73B55D31-2A0B-50B6-93D0-A894DA5A1811}</Project>
-      <Name>UnityEngine.XR.LegacyInputHelpers</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Services.Core.Environments.csproj">
-      <Project>{D8FF7DA4-C4B4-CA18-ACA9-69ED6D8F8FD5}</Project>
-      <Name>Unity.Services.Core.Environments</Name>
-    </ProjectReference>
-    <ProjectReference Include="UnityEditor.XR.LegacyInputHelpers.csproj">
-      <Project>{FB45FCCC-CB01-18BD-EA0F-F4A73D2AB129}</Project>
-      <Name>UnityEditor.XR.LegacyInputHelpers</Name>
-    </ProjectReference>
-    <ProjectReference Include="AstarPathfindingProjectEditor.csproj">
-      <Project>{8FB6D57D-43C4-57FA-1CB5-BC19ADF6270B}</Project>
-      <Name>AstarPathfindingProjectEditor</Name>
-    </ProjectReference>
-    <ProjectReference Include="UnityEditor.SpatialTracking.csproj">
-      <Project>{CFB1F2BD-AD8A-A4D3-0104-8CCDFC9AAFC5}</Project>
-      <Name>UnityEditor.SpatialTracking</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

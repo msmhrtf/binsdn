@@ -54,13 +54,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Analyzer Include="/Applications/Visual Studio.app/Contents/MonoBundle/Addins/MonoDevelop.Unity/Analyzers/Microsoft.Unity.Analyzers.dll" />
-    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AI4Unity.Fuzzy.dll" />
-    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.Genetic.dll" />
-    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.Neuro.dll" />
-    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.Fuzzy.dll" />
-    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.MachineLearning.dll" />
-    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.Core.dll" />
-    <Analyzer Include="/Users/alessandroprivitera/Desktop/GitExperiments/binsdn_OK/Assets/RequiredLibs/ai4unity/AForge.Math.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets/Editor/Wall_class.cs" />
@@ -328,9 +321,6 @@
     </Reference>
     <Reference Include="AForge.Fuzzy">
       <HintPath>Assets/RequiredLibs/ai4unity/AForge.Fuzzy.dll</HintPath>
-    </Reference>
-    <Reference Include="Parallel">
-      <HintPath>Assets/RequiredLibs/Parallel/Plugins/Parallel.dll</HintPath>
     </Reference>
     <Reference Include="AForge.MachineLearning">
       <HintPath>Assets/RequiredLibs/ai4unity/AForge.MachineLearning.dll</HintPath>

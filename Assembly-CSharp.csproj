@@ -62,6 +62,7 @@
     <Compile Include="Assets/SDNLib/audioRec.cs" />
     <Compile Include="Assets/SDNLib/SourceBuilder.cs" />
     <Compile Include="Assets/SDNLib/Lib/reflectionFinder.cs" />
+    <Compile Include="Assets/Utils/Mushra.cs" />
     <Compile Include="Assets/SDNLib/RoomBuilder.cs" />
     <Compile Include="Assets/SDNLib/Lib/SDNDraw.cs" />
     <Compile Include="Assets/SDNLib/Lib/SDN.cs" />

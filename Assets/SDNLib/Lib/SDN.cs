@@ -25,6 +25,8 @@ public class SDN : MonoBehaviour
     public bool doLateReflections = true;
     public bool doHrtfReflections = true;
 
+    public float volumeGain = 1.0f;
+
     private reflectionFinder RF;
 
     private reflectionPath directSound;
@@ -546,7 +548,16 @@ public class SDN : MonoBehaviour
                 }
             }
         }
+
+
+        //Applico un gain del volume
+        for (int j = 0; j < data.Length; j++)
+        {
+            data[j] = data[j] * volumeGain;
+        }
     }
+
+
 
     CrossfadeBuffer circBuffer;
     List<CrossfadeBuffer> juncCircBuffer = new List<CrossfadeBuffer>();

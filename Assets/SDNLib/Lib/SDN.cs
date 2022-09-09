@@ -22,8 +22,8 @@ public class SDN : MonoBehaviour
     public bool update = true;
 
     public bool enableListen = true;
-    public bool doLateReflections = true;
-    public bool doHrtfReflections = true;
+    public bool doLateReflections = true; //Calculate late Reflections?
+    public bool applyHrtfReflections = true; //apply HRTF filter to reflections and directSound?
 
     public float volumeGain = 1.0f;
 
@@ -460,6 +460,7 @@ public class SDN : MonoBehaviour
 
     public static void interleaveSimple(float[][] data_in, float[] data_out, int num_ch)
     {
+        Debug.Log("Channels " + num_ch);
         for (int i = 0; i < data_in[0].Length; ++i)
         {
             for (int ch = 0; ch < num_ch; ++ch)
@@ -505,7 +506,7 @@ public class SDN : MonoBehaviour
                         }
                     }
                 }
-                else //Il problema è qui?
+                else
                 {
                     idx = 0; // put buffer index to zero
                     for (i = 0; i < numSamps; i++)
@@ -513,16 +514,10 @@ public class SDN : MonoBehaviour
                         Jffts[0][i] = new Complex(outSamples.Dequeue(), 0);  //Carico i samples
                     }
 
-                    convHRTF_Crossfade(doHrtfReflections);
+                    convHRTF_Crossfade(applyHrtfReflections);
 
-                    if (doHrtfReflections)
-                    {
-                        interleaveData(result, Jresult, data, channels);
-                    }
-                    else
-                    {
-                        interleaveSimple(result, data, channels);
-                    }
+                    interleaveData(result, Jresult, data, channels);
+                    //interleaveSimple(result, data, channels);
                 }
             }
             else
@@ -572,19 +567,29 @@ public class SDN : MonoBehaviour
             Jhrtf_C[j] = CopyArrayLinq(Jhrtf[j]);
         }
 
-        result = circBuffer.getFromBuffer(Jffts[0], hrtf_C);
+        if (doIt)
+        {
+            result = circBuffer.getFromBuffer(Jffts[0], hrtf_C);
+        }
+        else
+        { //Copy sample as-is without HRTF calculation
+          //Debug.Log(Jresult[i][0].Length + " - - " + Jffts[0].Length);
+            for (int j = 0; j < result[0].Length; j++)
+            {
+                result[0][j] = (float)Jffts[0][j].Re;
+                result[1][j] = (float)Jffts[0][j].Re;
+
+            }
+        }
 
 
-//        Debug.Log(" Junctions = " + junctionsSamps.Count);
+        //        Debug.Log(" Junctions = " + junctionsSamps.Count);
 
         //QUI FACCIO LE HRTF con le 6 riflessioni sui muri
 
-        if (doIt)
+        // same thing for junctions --- qui vengono fatte le altre 6 convoluzioni
+        for (int i = 0; i < junctionsSamps.Count; i++)
         {
-            // same thing for junctions --- qui vengono fatte le altre 6 convoluzioni
-            for (int i = 0; i < junctionsSamps.Count; i++)
-            {
-
                 // reinitialize for next junction
                 for (int j = 0; j < Jffts.Length; j++)
                 {
@@ -594,8 +599,18 @@ public class SDN : MonoBehaviour
                 // copy
                 Array.Copy(junctionsSamps[i], Jffts[0], buffSize);
 
-                Jresult[i] = juncCircBuffer[i].getFromBuffer(Jffts[0], Jhrtf_C[i]);
 
+            if (doIt)
+            {
+                Jresult[i] = juncCircBuffer[i].getFromBuffer(Jffts[0], Jhrtf_C[i]);
+            }
+            else { //Copy sample as-is without HRTF calculation
+                //Debug.Log(Jresult[i][0].Length + " - - " + Jffts[0].Length);
+                for (int j = 0; j < Jresult[i][0].Length; j++) {
+                    Jresult[i][0][j] = (float) Jffts[0][j].Re;
+                    Jresult[i][1][j] = (float) Jffts[0][j].Re;
+                    
+                }
             }
         }
         // reinitialize for next buffer

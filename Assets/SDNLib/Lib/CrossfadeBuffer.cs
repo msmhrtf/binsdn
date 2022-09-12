@@ -199,28 +199,19 @@ public class CrossfadeBuffer
         //MODIFICATO!!!
         //        for (int i = 0; i < buffSize * 2; i++)
         if (hrtfs.Length == 2 && hrtfs[0].Length == buffSize && old_hrtfs[0].Length == buffSize) {
-        for (int i = 0; i < buffSize; i++)
-        {
-            ////NUOVO HRTF
-            try
+            for (int i = 0; i < buffSize; i++)
             {
+                ////NUOVO HRTF
                 Complex tmp1 = tempWindow[0][i];
                 Complex tmp2 = tmp1 * hrtfs[0][i] * buffSize;
                 tempWindow[1][i] = tmp2;
-            }
-            catch (Exception ex)
-            {
-                Debug.Log(ex.Message);
-                Debug.Log("Buffsize = " + buffSize);
-                Debug.Log(hrtfs[0].Length);
-                
-            }
-            tempWindow[2][i] = tempWindow[0][i] * hrtfs[1][i] * buffSize;
+
+                tempWindow[2][i] = tempWindow[0][i] * hrtfs[1][i] * buffSize;
 
                 ////VECCHIO HRTF
                 tempWindow[3][i] = tempWindow[0][i] * old_hrtfs[0][i] * buffSize;
                 tempWindow[4][i] = tempWindow[0][i] * old_hrtfs[1][i] * buffSize;
-    }
+            }
         }
         //else
         //{

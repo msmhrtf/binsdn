@@ -7,7 +7,7 @@ using UnityEngine;
 using System;
 using AForge.Math;
 
-public class CrossfadeBuffer : MonoBehaviour
+public class CrossfadeBuffer
 {
     float[][] outBuffer;
 
@@ -198,16 +198,34 @@ public class CrossfadeBuffer : MonoBehaviour
         FourierTransform.FFT(tempWindow[0], FourierTransform.Direction.Forward);
         //MODIFICATO!!!
         //        for (int i = 0; i < buffSize * 2; i++)
+        if (hrtfs.Length == 2 && hrtfs[0].Length == buffSize && old_hrtfs[0].Length == buffSize) {
         for (int i = 0; i < buffSize; i++)
         {
-                ////NUOVO HRTF
-                tempWindow[1][i] = tempWindow[0][i] * hrtfs[0][i] * buffSize;
-                tempWindow[2][i] = tempWindow[0][i] * hrtfs[1][i] * buffSize;
+            ////NUOVO HRTF
+            try
+            {
+                Complex tmp1 = tempWindow[0][i];
+                Complex tmp2 = tmp1 * hrtfs[0][i] * buffSize;
+                tempWindow[1][i] = tmp2;
+            }
+            catch (Exception ex)
+            {
+                Debug.Log(ex.Message);
+                Debug.Log("Buffsize = " + buffSize);
+                Debug.Log(hrtfs[0].Length);
+                
+            }
+            tempWindow[2][i] = tempWindow[0][i] * hrtfs[1][i] * buffSize;
 
                 ////VECCHIO HRTF
                 tempWindow[3][i] = tempWindow[0][i] * old_hrtfs[0][i] * buffSize;
                 tempWindow[4][i] = tempWindow[0][i] * old_hrtfs[1][i] * buffSize;
     }
+        }
+        //else
+        //{
+        //    Debug.Log("Buffer length non pronta " + hrtfs[0].Length);
+        //}
 
         FourierTransform.FFT(tempWindow[0], FourierTransform.Direction.Backward);
 
@@ -251,15 +269,22 @@ public class CrossfadeBuffer : MonoBehaviour
         //Calcolo la FFT e applico le elaborazioni
         //MODIFICATO!!!
         //        for (int i = 0; i < buffSize * 2; i++)
-        for (int i = 0; i < buffSize; i++)
+        if (hrtfs.Length == 2 && hrtfs[0].Length == buffSize)
         {
-            //NUOVO HRTF
+            for (int i = 0; i < buffSize; i++)
+            {
+                //NUOVO HRTF
                 tempWindow[1][i] = tempWindow[0][i] * hrtfs[0][i] * buffSize;
                 tempWindow[2][i] = tempWindow[0][i] * hrtfs[1][i] * buffSize;
 
-            //tempWindow[1][i] = tempWindow[0][i];
-            //tempWindow[2][i] = tempWindow[0][i];
+                //tempWindow[1][i] = tempWindow[0][i];
+                //tempWindow[2][i] = tempWindow[0][i];
+            }
+
         }
+        //else {
+        //    Debug.Log("Errore su HRTF length " + hrtfs[0].Length);
+        //}
         FourierTransform.FFT(tempWindow[0], FourierTransform.Direction.Backward);
 
 

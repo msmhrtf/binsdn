@@ -58,7 +58,7 @@ public class test : MonoBehaviour
 
     private void Start()
     {
-        int buffSize = 1024;
+//        int buffSize = 1024;
         //CircularBuffer cb = new CircularBuffer(buffSize, buffSize/2, CircularBuffer.WindowType.hanning,true);
 
 

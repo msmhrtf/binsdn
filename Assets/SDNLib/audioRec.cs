@@ -96,6 +96,7 @@ public class audioRec : MonoBehaviour {
 	
 
 		var filepath = fileName;
+		Debug.Log(filepath);
 		Directory.CreateDirectory(Path.GetDirectoryName(filepath));
 		ClipData clipdata = new ClipData ();
 		clipdata.samples = sampleCount;

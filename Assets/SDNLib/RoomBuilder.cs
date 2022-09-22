@@ -4,8 +4,16 @@ using UnityEngine;
 
 public class RoomBuilder : MonoBehaviour
 {
-    public float height = 2.4f, width = 3f, depth= 3f;
+    public float height = 2.4f, width = 3f, depth= 3f, wallabs= 0.99f;
+    //public int index = 0;
+    //public string wall_material;
     public bool showWalls = true;
+
+    public void ModifyAbsorptionCoefficient() {
+        foreach (WallFiltAndGain el in gameObject.transform.GetComponentsInChildren<WallFiltAndGain>()) {
+            el.wall_absorption_coeff = wallabs;
+        }
+    }
 
     public void CreatePlane()
     {
@@ -23,6 +31,7 @@ public class RoomBuilder : MonoBehaviour
         plane.AddComponent<WallFiltAndGain>();
         plane.name = "Floor";
         plane.transform.parent = gameObject.transform;
+        plane.GetComponent<WallFiltAndGain>().wall_absorption_coeff = wallabs;
         //Ceiling
         plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         plane.transform.localPosition = new Vector3(0, height, 0);
@@ -32,6 +41,8 @@ public class RoomBuilder : MonoBehaviour
         plane.AddComponent<WallFiltAndGain>();
         plane.name = "Ceiling";
         plane.transform.parent = gameObject.transform;
+        plane.GetComponent<WallFiltAndGain>().wall_absorption_coeff = wallabs;
+
         //Front
         plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         plane.transform.localPosition = new Vector3(0, height/2, depth/2);
@@ -41,6 +52,8 @@ public class RoomBuilder : MonoBehaviour
         plane.AddComponent<WallFiltAndGain>();
         plane.name = "Front";
         plane.transform.parent = gameObject.transform;
+        plane.GetComponent<WallFiltAndGain>().wall_absorption_coeff = wallabs;
+
         //Back
         plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         plane.transform.localPosition = new Vector3(0, height / 2, -depth / 2);
@@ -50,6 +63,8 @@ public class RoomBuilder : MonoBehaviour
         plane.AddComponent<WallFiltAndGain>();
         plane.name = "Back";
         plane.transform.parent = gameObject.transform;
+        plane.GetComponent<WallFiltAndGain>().wall_absorption_coeff = wallabs;
+
         //Left
         plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         plane.transform.localPosition = new Vector3(-width / 2, height/ 2, 0);
@@ -59,6 +74,8 @@ public class RoomBuilder : MonoBehaviour
         plane.AddComponent<WallFiltAndGain>();
         plane.name = "Left";
         plane.transform.parent = gameObject.transform;
+        plane.GetComponent<WallFiltAndGain>().wall_absorption_coeff = wallabs;
+
         //Right
         plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         plane.transform.localPosition = new Vector3(width/ 2, height / 2, 0);
@@ -68,12 +85,14 @@ public class RoomBuilder : MonoBehaviour
         plane.AddComponent<WallFiltAndGain>();
         plane.name = "Right";
         plane.transform.parent = gameObject.transform;
+        plane.GetComponent<WallFiltAndGain>().wall_absorption_coeff = wallabs;
+
 
     }
 
     //public GameObject Room;
 
-//    public SourceManager sourceManager;
+    //    public SourceManager sourceManager;
 
     // Use this for initialization
     void Start()

@@ -1478,7 +1478,7 @@ MonoBehaviour:
   update: 1
   enableListen: 1
   doLateReflections: 1
-  applyHrtfReflections: 0
+  applyHrtfReflections: 1
   volumeGain: 1
   positionArray: []
 --- !u!82 &1692565185

@@ -4,13 +4,15 @@ using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(WallFiltAndGain))]
+[CanEditMultipleObjects]
 public class Wall_class: Editor
 {
-
+    string[] options;
 
     // Start is called before the first frame update
     void OnEnable()
     {
+        options = AudioMaterials.getMaterialList();
     }
 
     // Update is called once per frame
@@ -27,10 +29,10 @@ public class Wall_class: Editor
 
         myTarget.wall_absorption_coeff = EditorGUILayout.FloatField("Wall Absorption Coefficient", myTarget.wall_absorption_coeff);
 
-        string[] options = new string[]
-         {
-             "concrete", "carpet", "glass", "gypsum","vynil", "wood", "rockfon"
-         };
+        //string[] options = new string[]
+        // {
+        //     "concrete", "carpet", "glass", "gypsum","vynil", "wood", "rockfon", "priviwood", "butterworthLow", "allpass"
+        // };
 
         int index = 0;
         for(int i=0; i<options.Length; i++) {

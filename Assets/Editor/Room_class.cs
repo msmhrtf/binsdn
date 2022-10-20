@@ -18,6 +18,11 @@ public class Room_class: Editor
         
     }
 
+    string[] options = new string[]
+         {
+             "concrete", "carpet", "glass", "gypsum","vynil", "wood", "rockfon"
+         };
+
     public override void OnInspectorGUI()
     {
         RoomBuilder myTarget = (RoomBuilder)target;
@@ -31,7 +36,15 @@ public class Room_class: Editor
             myTarget.CreatePlane();
         }
 
-//        SourceManager sourceManager = (SourceManager)EditorGUILayout.ObjectField("Source Manager:",myTarget.sourceManager, typeof(SourceManager), true);
-//        myTarget.sourceManager = sourceManager;
+        myTarget.wallabs = EditorGUILayout.FloatField("Wall Absorption Coefficient", myTarget.wallabs);
+
+        if (GUILayout.Button("Update Wall Absorption Coeff"))
+        {
+            myTarget.ModifyAbsorptionCoefficient();
+        }
+
+        //myTarget.wall_material = options[EditorGUILayout.Popup("Wall Material", myTarget.index, options)];
+        //        SourceManager sourceManager = (SourceManager)EditorGUILayout.ObjectField("Source Manager:",myTarget.sourceManager, typeof(SourceManager), true);
+        //        myTarget.sourceManager = sourceManager;
     }
 }

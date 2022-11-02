@@ -39,6 +39,7 @@
      <Compile Include="Assets/test.cs" />
      <Compile Include="Assets/SDNLib/Lib/WallFiltAndGain.cs" />
      <Compile Include="Assets/SDNLib/SDNEnvConfig.cs" />
+     <Compile Include="Assets/SDNLib/Lib/AudioMaterials.cs" />
      <Compile Include="Assets/SDNLib/audioRec.cs" />
      <Compile Include="Assets/SDNLib/SourceBuilder.cs" />
      <Compile Include="Assets/SDNLib/Lib/reflectionFinder.cs" />
@@ -53,7 +54,6 @@
      <Compile Include="Assets/SDNLib/Lib/reflectionPath.cs" />
      <Compile Include="Assets/SDNLib/Lib/FourthOrderFilter.cs" />
      <Compile Include="Assets/SDNLib/Lib/BiQuad.cs" />
-     <Compile Include="Assets/SDNLib/Lib/AudioMaterials.cs" />
      <None Include="Assets/Resources/subject152_txt/R08.txt" />
      <None Include="Assets/Resources/subject165_txt/triangles/triangles.txt" />
      <None Include="Assets/Resources/subject051_txt/L21.txt" />

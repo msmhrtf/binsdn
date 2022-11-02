@@ -1129,6 +1129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   listener: {fileID: 963194225}
+  PlayOnAwake: 1
   update: 1
   enableListen: 1
   doLateReflections: 0
@@ -1475,6 +1476,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   listener: {fileID: 963194225}
+  PlayOnAwake: 0
   update: 1
   enableListen: 1
   doLateReflections: 1
@@ -1690,6 +1692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   listener: {fileID: 963194225}
+  PlayOnAwake: 1
   update: 1
   enableListen: 1
   doLateReflections: 1
@@ -1939,6 +1942,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   listener: {fileID: 963194225}
+  PlayOnAwake: 1
   update: 1
   enableListen: 1
   doLateReflections: 1

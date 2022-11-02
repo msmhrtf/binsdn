@@ -20,6 +20,7 @@ public class SDN : MonoBehaviour
     private GameObject rooms;
 
     public static int targetNumReflections = 35;
+    public bool PlayOnAwake = true;
     public bool update = true;
 
     public bool enableListen = true;
@@ -117,8 +118,10 @@ public class SDN : MonoBehaviour
 
     void Start()
     {
-        GetComponent<AudioSource>().Play();
-
+        if(PlayOnAwake){
+            GetComponent<AudioSource>().Play();
+        }
+        
         _source = this.gameObject.GetComponent<AudioSource>();
 
         AudioConfiguration AC = AudioSettings.GetConfiguration();

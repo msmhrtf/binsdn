@@ -215,8 +215,16 @@ public class SDN : MonoBehaviour
         checkDelayClear();
 
         // get HRTFs from HRTFmanager
-        hrtf = this.gameObject.GetComponent<HRTFmanager>().getHrftDirect();   // TO DO: update only if move
-        Jhrtf = this.gameObject.GetComponent<HRTFmanager>().hrtf_nodes;
+            hrtf = this.gameObject.GetComponent<HRTFmanager>().getHrftDirect();   // TO DO: update only if move
+
+        //Debug.Log(junctionsSamps.Count);
+        if(junctionsSamps.Count == this.gameObject.GetComponent<HRTFmanager>().hrtf_nodes.Count){
+            Jhrtf = this.gameObject.GetComponent<HRTFmanager>().hrtf_nodes;
+        }else{
+            Debug.Log("Warning: Wrong number of walls");
+            Debug.Log("Junction Samples : " + junctionsSamps.Count);
+            Debug.Log("HRTF Nodes : " + this.gameObject.GetComponent<HRTFmanager>().hrtf_nodes.Count);
+        }
 
         //loaded = subjectInfo.HRTFCamera.getLoaded();
 
@@ -569,10 +577,11 @@ public class SDN : MonoBehaviour
     {
         //Copia la funziona hrtf corretta
         hrtf_C = CopyArrayLinq(hrtf);       // TO DO: copy only if moving
-        for (int j = 0; j < junctionsSamps.Count; j++)
+        /*for (int j = 0; j < junctionsSamps.Count; j++)
         {
             Jhrtf_C[j] = CopyArrayLinq(Jhrtf[j]);
-        }
+        }*/
+
 
         if (doIt)
         {
@@ -594,9 +603,17 @@ public class SDN : MonoBehaviour
 
         //QUI FACCIO LE HRTF con le 6 riflessioni sui muri
 
-        // same thing for junctions --- qui vengono fatte le altre 6 convoluzioni
+
+
+        //Non sempre i juncSampls coincidono, poiche' il numero di muri viene aggiunto "on the fly"
+        //bisognerebbe aggiungere un semaphore quando vengono ricalcolate le riflessioni sui muri
         for (int i = 0; i < junctionsSamps.Count; i++)
         {
+            Jhrtf_C[i] = CopyArrayLinq(Jhrtf[i]);
+        //}
+        // same thing for junctions --- qui vengono fatte le altre 6 convoluzioni
+        //for (int i = 0; i < junctionsSamps.Count; i++)
+        //{
                 // reinitialize for next junction
                 for (int j = 0; j < Jffts.Length; j++)
                 {
@@ -609,10 +626,23 @@ public class SDN : MonoBehaviour
 
             if (doIt)
             {
-                Jresult[i] = juncCircBuffer[i].getFromBuffer(Jffts[0], Jhrtf_C[i]);
+                try{
+                    Jresult[i] = juncCircBuffer[i].getFromBuffer(Jffts[0], Jhrtf_C[i]);
+                }
+                catch (Exception e)
+                {
+                    Debug.Log("Warning: some junctions is lost in threads. Do Not Worry.");
+                    Debug.Log("void convHRTF_Crossfade");
+                    Debug.Log("Lost Reflection?");
+                    /*Debug.Log("for cycle step: " + i);
+                    Debug.Log("juncCircBuffer L= " + juncCircBuffer.Count);
+                    Debug.Log("jResult L= " + Jresult.Count);
+                    Debug.Log("Junction Hrtf L: " + Jhrtf.Count);
+                    Debug.Log("Jhrtf_C L: " + Jhrtf_C.Count);*/
+                    
+                }
             }
             else { //Copy sample as-is without HRTF calculation
-                //Debug.Log(Jresult[i][0].Length + " - - " + Jffts[0].Length);
                 for (int j = 0; j < Jresult[i][0].Length; j++) {
                     Jresult[i][0][j] = (float) Jffts[0][j].Re;
                     Jresult[i][1][j] = (float) Jffts[0][j].Re;
@@ -648,7 +678,7 @@ public class SDN : MonoBehaviour
     private void removeHRTFmanager(int index) // updates (remove) list of azi/ele, database indices, and hrtfs array
     {
 
-//        Debug.Log("Chiamato RemoveHRTFManager");
+        //Debug.Log("Chiamato RemoveHRTFManager. Eliminata una Juction?");
         // hrtf manager
         positionArray.RemoveAt(index);
         this.gameObject.GetComponent<HRTFmanager>().azEl.RemoveAt(index);
@@ -672,20 +702,19 @@ public class SDN : MonoBehaviour
     private void addHRTFmanager(UnityEngine.Vector3 nodePos) // updates (add) list of azi/ele, database indices, and initialize hrtfs jagged array
     {
 
-//        Debug.Log("Chiamato HRTFManager");
-
-        float[][] tempBuff2 = new float[2][];
-        float[][] tempBuff = new float[2][];
-        float[][] tempBuffBuff = new float[2][];
-        Complex[][] tempBuff2_C = new Complex[2][];
-        Complex[][] tempBuff2_CC = new Complex[2][];
-        for (int i = 0; i < tempBuff.Length; i++)
+        //Debug.Log("Chiamato addHRTFManager. Aggiunta una Juction?");
+        //float[][] tempBuff2 = new float[2][];
+        //float[][] tempBuff = new float[2][];
+        float[][] floatEmptyBuff = new float[2][];
+        Complex[][] complexEmptyBuff = new Complex[2][];
+        Complex[][] complexEmptyBuff2 = new Complex[2][];
+        for (int i = 0; i < 2; i++) //Creo il buffer per lo stereo
         {
-            tempBuff2[i] = new float[fftLength];
-            tempBuff2_C[i] = new Complex[fftLength];
-            tempBuff2_CC[i] = new Complex[fftLength];
-            tempBuff[i] = new float[buffSize];
-            tempBuffBuff[i] = new float[buffSize];
+            //tempBuff2[i] = new float[fftLength];
+            complexEmptyBuff[i] = new Complex[fftLength];
+            complexEmptyBuff2[i] = new Complex[fftLength]; //Si può togliere?
+            //tempBuff[i] = new float[buffSize];
+            floatEmptyBuff[i] = new float[buffSize];
         }
 
         // hrtf manager
@@ -695,19 +724,12 @@ public class SDN : MonoBehaviour
 
         this.gameObject.GetComponent<HRTFmanager>().azEl.Add(aziEle);
         //this.gameObject.GetComponent<HRTFmanager>().indices.Add(ind);
-        this.gameObject.GetComponent<HRTFmanager>().hrtf_nodes.Add(tempBuff2_C);
+        this.gameObject.GetComponent<HRTFmanager>().hrtf_nodes.Add(complexEmptyBuff);
 
         // junction manager
         junctionsSamps.Add(new Complex[fftLength]);
-        Jresult.Add(tempBuffBuff);
-        Jhrtf_C.Add(tempBuff2_CC);
-
-        // snowman manager
-        //this.gameObject.GetComponent<Snowman>().JoutL.Add(new Complex[fftLength]);
-        //this.gameObject.GetComponent<Snowman>().JoutR.Add(new Complex[fftLength]);
-        //this.gameObject.GetComponent<Snowman>().Jitd_l.Add(0.0f);
-        //this.gameObject.GetComponent<Snowman>().Jitd_r.Add(0.0f);
-
+        Jresult.Add(floatEmptyBuff);
+        Jhrtf_C.Add(complexEmptyBuff2);
 
         //ROBA MIA
         juncCircBuffer.Add(new CrossfadeBuffer(buffSize));

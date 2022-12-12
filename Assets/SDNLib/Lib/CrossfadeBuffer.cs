@@ -126,6 +126,9 @@ public class CrossfadeBuffer
 
 //        Debug.Log("Buffer size: " + bufferSize + " - " + overlap);
 
+        //Inizializzo la DelayLine Stereo
+        delayLine = new StereoVariableDelayLine();
+
     }
 
     public CrossfadeBuffer(int bufferSize) : this(bufferSize, false){}
@@ -141,20 +144,7 @@ public class CrossfadeBuffer
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    StereoVariableDelayLine delayLine;
     public float[][] getFromBuffer(Complex[] data, Complex[][] hrtfs)
     {
 
@@ -171,7 +161,6 @@ public class CrossfadeBuffer
         for (int i = 0; i < tempWindow.Length; i++)
         {
             //MODIFICATO!!
-            //tempWindow[i] = new Complex[buffSize * 2];
             tempWindow[i] = new Complex[buffSize];
         }
 
@@ -222,10 +211,6 @@ public class CrossfadeBuffer
                 tempWindow[4][i] = tempWindow[0][i] * old_hrtfs[1][i] * buffSize;
     }
         }
-        //else
-        //{
-        //    Debug.Log("Buffer length non pronta " + hrtfs[0].Length);
-        //}
 
         FourierTransform.FFT(tempWindow[0], FourierTransform.Direction.Backward);
 
@@ -240,9 +225,7 @@ public class CrossfadeBuffer
         //area Crossfade
         for (int i = 0; i < overlap; i++)
         {
-            //outData[0][i] = (outBuffer[0][i] + (float)tempWindow[3][i].Re) * window[overlap + i] + (float)tempWindow[1][i].Re * window[i];
-            //outData[1][i] = (outBuffer[1][i] + (float)tempWindow[4][i].Re) * window[overlap + i] + (float)tempWindow[2][i].Re * window[i];
-
+          
             outData[0][i] = (outBuffer[0][i]) + (float)tempWindow[3][i].Re * window[overlap + i] + (float)tempWindow[1][i].Re * window[i];
             outData[1][i] = (outBuffer[1][i]) + (float)tempWindow[4][i].Re * window[overlap + i] + (float)tempWindow[2][i].Re * window[i];
 
@@ -267,8 +250,7 @@ public class CrossfadeBuffer
 
 
         //Calcolo la FFT e applico le elaborazioni
-        //MODIFICATO!!!
-        //        for (int i = 0; i < buffSize * 2; i++)
+
         if (hrtfs.Length == 2 && hrtfs[0].Length == buffSize)
         {
             for (int i = 0; i < buffSize; i++)
@@ -277,14 +259,10 @@ public class CrossfadeBuffer
                 tempWindow[1][i] = tempWindow[0][i] * hrtfs[0][i] * buffSize;
                 tempWindow[2][i] = tempWindow[0][i] * hrtfs[1][i] * buffSize;
 
-                //tempWindow[1][i] = tempWindow[0][i];
-                //tempWindow[2][i] = tempWindow[0][i];
             }
 
         }
-        //else {
-        //    Debug.Log("Errore su HRTF length " + hrtfs[0].Length);
-        //}
+
         FourierTransform.FFT(tempWindow[0], FourierTransform.Direction.Backward);
 
 
@@ -305,128 +283,18 @@ public class CrossfadeBuffer
             /*Canale sinistro?*/
             outBuffer[1][i] = (float)tempWindow[2][i + buffSize/2].Re;
         }
-        ////Resto
-        //for (int i = overlap; i < buffSize/2; i++)
-        //{
-        //    float a = outData[0][i + buffSize / 2] + (float)tempWindow[1][i].Re;
-        //    float b = outData[1][i + buffSize / 2] + (float)tempWindow[2][i].Re;
-        //    outData[0][i + buffSize / 2] = a;
-        //    outData[1][i + buffSize / 2] = b;
-        //}
 
-
-
-
-
-
-        //copio la vecchia hrtf
         old_hrtfs = Util_CopyArrayLinq(hrtfs);
+
+        delayLine.processDelay(outData, 0, 0);
 
         return outData;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //public float[][] getFromBuffer(Complex[] data, Complex[][] hrtfs)
-    //{
-
-    //    if (resetInput)
-    //    {
-    //        for (int i = 0; i < buffSize; i++)
-    //        {
-    //            //data[i].Re = (Mathf.Sin(2 * Mathf.PI * 2 * i / (buffSize)) + Mathf.Sin(2 * Mathf.PI * i / (buffSize)))/2;
-    //            data[i].Re = Mathf.Sin(2 * Mathf.PI * 2 * i / (buffSize));
-    //            //data[i].Re = 1;
-    //        }
-    //    }
-
-    //    for (int i = 0; i < tempWindow.Length; i++)
-    //    {
-    //        tempWindow[i] = new Complex[buffSize * 2];
-    //    }
-
-    //    //Copio la finestra di dati su tempWindow[0]
-    //    for (int i = 0; i < buffSize; i++)
-    //    {
-    //        tempWindow[0][i] = data[i];
-    //    }
-
-    //    FourierTransform.FFT(tempWindow[0], FourierTransform.Direction.Forward);
-
-
-    //    //Calcolo la FFT e applico le elaborazioni
-    //    for (int i = 0; i < buffSize * 2; i++)
-    //    {
-    //        //NUOVO HRTF
-    //        tempWindow[1][i] = tempWindow[0][i] * hrtfs[0][i] * buffSize * 2;
-    //        tempWindow[2][i] = tempWindow[0][i] * hrtfs[1][i] * buffSize * 2;
-
-    //        //VECCHIO HRTF
-    //        tempWindow[3][i] = tempWindow[0][i] * old_hrtfs[0][i] * buffSize * 2;
-    //        tempWindow[4][i] = tempWindow[0][i] * old_hrtfs[1][i] * buffSize * 2;
-    //    }
-    //    FourierTransform.FFT(tempWindow[1], FourierTransform.Direction.Backward);
-    //    FourierTransform.FFT(tempWindow[2], FourierTransform.Direction.Backward);
-
-    //    FourierTransform.FFT(tempWindow[3], FourierTransform.Direction.Backward);
-    //    FourierTransform.FFT(tempWindow[4], FourierTransform.Direction.Backward);
-
-    //    //Copio i dati in uscita
-    //    float[][] outData = new float[2][];
-    //    for (int i = 0; i < 2; i++) {
-    //        outData[i] = new float[buffSize];
-    //    }
-
-
-    //    //Salvo i dati elaborati
-    //    //area Crossfade
-    //    for (int i = 0; i < overlap; i++)
-    //    {
-    //        outData[0][i] = (outBuffer[0][i] + (float)tempWindow[3][i].Re) * window[overlap+i] + (float)tempWindow[1][i].Re * window[i];
-    //        outData[1][i] = (outBuffer[1][i] + (float)tempWindow[4][i].Re) * window[overlap+i] + (float)tempWindow[2][i].Re * window[i];
-
-    //        /*Canale destro?*/
-    //        outBuffer[0][i] = (float)tempWindow[1][i + buffSize].Re;
-    //        /*Canale sinistro?*/
-    //        outBuffer[1][i] = (float)tempWindow[2][i + buffSize].Re;
-    //    }
-    //    //Resto
-    //    for (int i = overlap; i < buffSize; i++)
-    //    {
-    //        outData[0][i] = (float)tempWindow[1][i].Re;
-    //        outData[1][i] = (float)tempWindow[2][i].Re;
-
-    //        /*Canale destro?*/
-    //        //outBuffer[0][i] = (float)tempWindow[1][i+buffSize].Re;
-    //        /*Canale sinistro?*/
-    //        //outBuffer[1][i] = (float)tempWindow[2][i + buffSize].Re;
-    //    }
-
-
-    //    //copio la vecchia hrtf
-    //    old_hrtfs = Util_CopyArrayLinq(hrtfs);
-
-    //    return outData;
-    //}
 
     public float[][] getFromBuffer(Complex[] data, Complex[][] hrtfs, bool writeTestFile)
     {
         float[][] outData = getFromBuffer(data, hrtfs);
         return outData;
     }
-
 
 }

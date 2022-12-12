@@ -13,10 +13,8 @@ public class SDN : MonoBehaviour
     private SDNEnvConfig subjectInfo;
 
     public GameObject listener;
-    //public boundary boundary;
     private boundary boundary;
     private GameObject geoForNetwork;
-    //private GameObject FPcam;
     private GameObject rooms;
 
     public static int targetNumReflections = 35;
@@ -63,7 +61,9 @@ public class SDN : MonoBehaviour
     private bool haveNewReflections = false;
     private bool doClear = false;
 
-    private Mutex sampleMX;
+    public bool debugThisSource = false;
+
+    //private Mutex sampleMX;
     private Mutex networkMX;
     private Thread audioProcessThread;
     private bool audioProcessKeepAlive = true;
@@ -112,8 +112,6 @@ public class SDN : MonoBehaviour
                 subjectInfo = tmp[0];
                 break;
         }
-
-        //subjectInfo = GameObject.Find("SubjectInfo").GetComponent<SDNEnvConfig>();
     }
 
     void Start()
@@ -141,8 +139,6 @@ public class SDN : MonoBehaviour
 
         geoForNetwork = GameObject.FindObjectOfType<RoomBuilder>().getActiveRoom();
         Debug.Assert(geoForNetwork != null, "Error!! Please Insert a RoomBuilder inside the project!");
-        //        geoForNetwork = GameObject.Find("Rooms").GetComponent<RoomBuilder>().getActiveRoom();
-
 
         boundary[] tmp = FindObjectsOfType<boundary>();
         if (tmp.Length < 1) Debug.Log("SDN.cs is looking for boundary which is missing! Please insert one!");
@@ -160,16 +156,12 @@ public class SDN : MonoBehaviour
         {
             RF.onNewReflections += draw.updateVisualNetwork;
         }
-        sampleMX = new Mutex();
+        //sampleMX = new Mutex();
         networkMX = new Mutex();
-        audioProcessThread = new Thread(audioProcess);
-        audioProcessThread.Start();
+        //audioProcessThread = new Thread(audioProcess);
+        //audioProcessThread.Start();
         scriptInit = true;
 
-        //FPcam = GameObject.Find("CenterEyeAnchor");
-
-        //NON MODIFICATO!!
-//        fftLength = 2 * buffSize;
         fftLength = buffSize;
 
         AFout = new Complex[fftLength];
@@ -198,6 +190,7 @@ public class SDN : MonoBehaviour
 
     }
 
+    int oldnetworkcount = 0;
     void Update()
     {
         RF.doUpdate = update;
@@ -209,6 +202,10 @@ public class SDN : MonoBehaviour
             directDelay.setDelay(delayLine.distanceToDelayTime(directSound.totalDistance()));
             directAtt = 1.0f / (UnityEngine.Vector3.Distance(listener.transform.position, gameObject.transform.position) + 1.0f); //Corretta
             networkInScale = 1.0f / network.Count;
+            if(network.Count != oldnetworkcount){
+                //Debug.Log("Network count changed: " + network.Count);
+            }
+            oldnetworkcount = network.Count;
             haveNewReflections = false;
             networkMX.ReleaseMutex();
         }
@@ -225,10 +222,11 @@ public class SDN : MonoBehaviour
             Debug.Log("Junction Samples : " + junctionsSamps.Count);
             Debug.Log("HRTF Nodes : " + this.gameObject.GetComponent<HRTFmanager>().hrtf_nodes.Count);
         }
-
-        //loaded = subjectInfo.HRTFCamera.getLoaded();
-
     }
+
+
+
+
 
     void OnApplicationQuit()
     {
@@ -240,59 +238,12 @@ public class SDN : MonoBehaviour
 
         while (audioProcessKeepAlive)
         {
-            propagateNetwork();
+            //propagateNetwork();
         }
 
     }
 
-    public void propagateNetwork()
-    {
-
-        sampleMX.WaitOne();
-        networkMX.WaitOne();
-        int numSampsToConsume = inSamples.Count;
-        // horrible hack to solve latency @ startup - the queue quickly fills up from
-        // the audio thread before the main thread can catch up. I am a bad person for doing this.
-        if (inSamples.Count > 10000)
-        {
-            inSamples.Clear();
-            sampleMX.ReleaseMutex();
-            return;
-        }
-
-        int i, j;
-
-        for (i = 0; i < numSampsToConsume; i++)
-        {
-            outVal = 0.0f;
-            inVal = inSamples.Dequeue() * networkInScale; //networkInScale = 1/network.Count;
-//CREDO sia il numero di muri del network, altrimenti è il numero di nodi (cioè 36 - nodi "i-j" diagonali)
-
-            // direct path processing
-            directDelay.write(inVal);
-            directVal = directDelay.read(); //leggo il sample con il delay indicato già corretto
-            directVal *= directAtt; //calcolata come 1/distanza (approssimata?). Distanza è sempre positiva, quindi
-            //non inverte la fase
-            outSamples.Enqueue(directVal);
-
-            // Prendo lo stesso sample e lo butto su tutti i nodi, con il delay corretto
-            for (j = 0; j < network.Count; j++) //Per tutti i nodi presenti (6?)
-            {
-                junctionsSamps[j][idx] = new Complex(network[j].getOutgoing(), 0); //leggo il sample con il delay
-                //corretto. Gestisco un buffer intero con idx, che è definito globale 
-
-                network[j].inputIncoming(inVal);
-                network[j].doScattering(doLateReflections);
-            }
-            idx++;
-
-            // outVal += directVal;
-            // outSamples.Enqueue(outVal*10);
-
-        }
-        sampleMX.ReleaseMutex();
-        networkMX.ReleaseMutex();
-    }
+    
 
     public void checkDelayClear()
     {
@@ -329,14 +280,7 @@ public class SDN : MonoBehaviour
     // Function to set new room boundaries. 
     // See RoomManager script.
     {
-
-
         geoForNetwork = room;
-
-        //doHrtfReflections = false;
-        //doLateReflections = false;
-
-        //network = new List<SDNnode>();
 
         // update boundary
         boundary.setBoundaryBounds(GetMaxBounds(geoForNetwork));
@@ -352,7 +296,6 @@ public class SDN : MonoBehaviour
     // Function to update wall absortption filters and wall absorbption coefficients according to wall properties set in the Unity user GUI for each wall of the room.
     // See RoomManager and SDNNode.
     {
-        //clearNetwork();
 
         for (int i = 0; i < network.Count; i++)
         {
@@ -363,7 +306,6 @@ public class SDN : MonoBehaviour
     public void setHaveNewRef()
     {
         haveNewReflections = true;
-        //Debug.Log(haveNewReflections);
     }
 
     public void clearAllDelays()
@@ -375,11 +317,6 @@ public class SDN : MonoBehaviour
     {
         SDNnode.setLoss(loss);
     }
-
-    //public void setNodeSpecularity(float spec)
-    //{
-    //    SDNnode.setSpecularity(spec);
-    //}
 
     public void setNodeWallAbs(float abs)
     {
@@ -496,7 +433,7 @@ public class SDN : MonoBehaviour
         if (scriptInit)
         {
 
-            sampleMX.WaitOne();
+            //sampleMX.WaitOne();
 
             for (i = 0; i < numSamps; i++)
             {
@@ -508,7 +445,7 @@ public class SDN : MonoBehaviour
                 inSamples.Enqueue(AFin * chanScale); //Se fosse, ad es, due canali, divide per due per rendere ok il volume
             }  //Questa parte carica i valori su una coda che poi li passa al "propagate network" (v. sotto), per l'elaborazione del rimbombo
 
-            if (!(outSamples.Count < numSamps)) // sound output when buffer is full -- pesca i sample dalla coda dello scattering delay
+            if (!(outSamples.Count <= numSamps)) // sound output when buffer is full -- pesca i sample dalla coda dello scattering delay
             {
                 //Se bypassato il resto non ci sono clicks, questa parte è OK
                 if (!enableListen)
@@ -545,7 +482,18 @@ public class SDN : MonoBehaviour
                     }
                 }
             }
-            sampleMX.ReleaseMutex();
+
+            propagateNetwork();
+
+            //Applico un gain del volume
+            for (int j = 0; j < data.Length; j++)
+            {
+                data[j] = data[j] * volumeGain;
+            }
+
+            //sampleMX.ReleaseMutex();
+
+            
 
         }
         else
@@ -560,28 +508,87 @@ public class SDN : MonoBehaviour
         }
 
 
-        //Applico un gain del volume
-        for (int j = 0; j < data.Length; j++)
+
+    }
+
+    public void propagateNetwork()
+    {
+
+        //sampleMX.WaitOne();
+        networkMX.WaitOne();
+
+
+
+        int numSampsToConsume = inSamples.Count;
+        // horrible hack to solve latency @ startup - the queue quickly fills up from
+        // the audio thread before the main thread can catch up. I am a bad person for doing this.
+        if (inSamples.Count > 10000)
         {
-            data[j] = data[j] * volumeGain;
+            Debug.Log("Terrible hack incoming!!!");
+            inSamples.Clear();
+            //sampleMX.ReleaseMutex();
+            networkMX.ReleaseMutex(); //Riga aggiunta da me... è corretta?
+            return;
         }
+
+        int i, j;
+
+        for (i = 0; i < numSampsToConsume; i++)
+        {
+            outVal = 0.0f;
+            inVal = inSamples.Dequeue() * networkInScale; //networkInScale = 1/network.Count;
+                                                          //CREDO sia il numero di muri del network, altrimenti è il numero di nodi (cioè 36 - nodi "i-j" diagonali)
+
+            // direct path processing
+            directDelay.write(inVal);
+            directVal = directDelay.read(); //leggo il sample con il delay indicato già corretto
+            directVal *= directAtt; //calcolata come 1/distanza (approssimata?). Distanza è sempre positiva, quindi
+            //non inverte la fase
+            outSamples.Enqueue(directVal);
+
+            // Prendo lo stesso sample e lo butto su tutti i nodi, con il delay corretto
+            for (j = 0; j < network.Count; j++) //Per tutti i nodi presenti (6?)
+            {
+                try
+                {
+                    //junctionsSamps[j][idx] = new Complex(network[j].getOutgoing(), 0); //leggo il sample con il delay
+                                                                                       //corretto. Gestisco un buffer intero con idx, che è definito globale 
+                    junctionsSamps[j][i] = new Complex(network[j].getOutgoing(), 0); //leggo il sample con il delay
+                                                                                       //corretto. Gestisco un buffer intero con idx, che è definito globale 
+
+                }
+                catch (Exception e)
+                {
+                    Debug.Log("ERRORE!!!");
+                    Debug.Log("CCX junctionsSamps Length = " + junctionsSamps.Count);
+                    Debug.Log("CCX junctionsSamps[j] Length = " + junctionsSamps[j].Length);
+                    Debug.Log("CCX idx: " + idx);
+                    Debug.Log("CCX j: " + j);
+
+                    //sampleMX.ReleaseMutex();
+                    networkMX.ReleaseMutex();
+                    return;
+                }
+                network[j].inputIncoming(inVal);
+                network[j].doScattering(doLateReflections);
+            }
+            //idx++;
+        }
+
+
+        //sampleMX.ReleaseMutex();
+        networkMX.ReleaseMutex();
     }
 
 
 
     CrossfadeBuffer circBuffer;
     List<CrossfadeBuffer> juncCircBuffer = new List<CrossfadeBuffer>();
-    CrossfadeBuffer.WindowType windowType = CrossfadeBuffer.WindowType.hanning;
-
+    
     private void convHRTF_Crossfade(bool doIt)
     {
         //Copia la funziona hrtf corretta
         hrtf_C = CopyArrayLinq(hrtf);       // TO DO: copy only if moving
-        /*for (int j = 0; j < junctionsSamps.Count; j++)
-        {
-            Jhrtf_C[j] = CopyArrayLinq(Jhrtf[j]);
-        }*/
-
 
         if (doIt)
         {
@@ -589,7 +596,6 @@ public class SDN : MonoBehaviour
         }
         else
         { //Copy sample as-is without HRTF calculation
-          //Debug.Log(Jresult[i][0].Length + " - - " + Jffts[0].Length);
             for (int j = 0; j < result[0].Length; j++)
             {
                 result[0][j] = (float)Jffts[0][j].Re;
@@ -598,12 +604,7 @@ public class SDN : MonoBehaviour
             }
         }
 
-
-        //        Debug.Log(" Junctions = " + junctionsSamps.Count);
-
         //QUI FACCIO LE HRTF con le 6 riflessioni sui muri
-
-
 
         //Non sempre i juncSampls coincidono, poiche' il numero di muri viene aggiunto "on the fly"
         //bisognerebbe aggiungere un semaphore quando vengono ricalcolate le riflessioni sui muri
@@ -612,8 +613,6 @@ public class SDN : MonoBehaviour
             Jhrtf_C[i] = CopyArrayLinq(Jhrtf[i]);
         //}
         // same thing for junctions --- qui vengono fatte le altre 6 convoluzioni
-        //for (int i = 0; i < junctionsSamps.Count; i++)
-        //{
                 // reinitialize for next junction
                 for (int j = 0; j < Jffts.Length; j++)
                 {
@@ -634,11 +633,6 @@ public class SDN : MonoBehaviour
                     Debug.Log("Warning: some junctions is lost in threads. Do Not Worry.");
                     Debug.Log("void convHRTF_Crossfade");
                     Debug.Log("Lost Reflection?");
-                    /*Debug.Log("for cycle step: " + i);
-                    Debug.Log("juncCircBuffer L= " + juncCircBuffer.Count);
-                    Debug.Log("jResult L= " + Jresult.Count);
-                    Debug.Log("Junction Hrtf L: " + Jhrtf.Count);
-                    Debug.Log("Jhrtf_C L: " + Jhrtf_C.Count);*/
                     
                 }
             }
@@ -689,12 +683,6 @@ public class SDN : MonoBehaviour
         Jhrtf_C.RemoveAt(index);
         Jresult.RemoveAt(index);
 
-        // snowman manager
-        //this.gameObject.GetComponent<Snowman>().JoutL.RemoveAt(index);
-        //this.gameObject.GetComponent<Snowman>().JoutR.RemoveAt(index);
-        //this.gameObject.GetComponent<Snowman>().Jitd_l.RemoveAt(index);
-        //this.gameObject.GetComponent<Snowman>().Jitd_r.RemoveAt(index);
-
         //ROBA MIA
         juncCircBuffer.RemoveAt(index);
     }
@@ -703,17 +691,13 @@ public class SDN : MonoBehaviour
     {
 
         //Debug.Log("Chiamato addHRTFManager. Aggiunta una Juction?");
-        //float[][] tempBuff2 = new float[2][];
-        //float[][] tempBuff = new float[2][];
         float[][] floatEmptyBuff = new float[2][];
         Complex[][] complexEmptyBuff = new Complex[2][];
         Complex[][] complexEmptyBuff2 = new Complex[2][];
         for (int i = 0; i < 2; i++) //Creo il buffer per lo stereo
         {
-            //tempBuff2[i] = new float[fftLength];
             complexEmptyBuff[i] = new Complex[fftLength];
             complexEmptyBuff2[i] = new Complex[fftLength]; //Si può togliere?
-            //tempBuff[i] = new float[buffSize];
             floatEmptyBuff[i] = new float[buffSize];
         }
 
@@ -723,7 +707,6 @@ public class SDN : MonoBehaviour
         int[] ind = this.gameObject.GetComponent<HRTFmanager>().getIndices(aziEle[0], aziEle[1]);
 
         this.gameObject.GetComponent<HRTFmanager>().azEl.Add(aziEle);
-        //this.gameObject.GetComponent<HRTFmanager>().indices.Add(ind);
         this.gameObject.GetComponent<HRTFmanager>().hrtf_nodes.Add(complexEmptyBuff);
 
         // junction manager
@@ -797,7 +780,6 @@ public class SDN : MonoBehaviour
                 if (!network[i].containsConnection(network[idx]))
                 {
                     network[i].addConnection(network[idx]);
-                    //network[i].getConnections[i].setFilter()
                 }
             }
         }
@@ -964,82 +946,6 @@ public class SDN : MonoBehaviour
         }
     }
 
-    public class FDelay
-    {
-        // A polynomial interploation fractional delay line
-        // Based on Pelle Juul´s C++ implementation: https://github.com/PelleJuul/lyt/blob/master/library/fdelay.cpp
-
-        private int index = 300;
-        private int d0;
-        private int d1;
-        private int d2;
-        private int d3;
-        private float delay;
-        private float frac;
-        private float[] vec;
-
-        public FDelay()
-        {
-            setMaxDelay(1);
-            setDelay(1);
-        }
-
-        public FDelay(int maxDelay, float delay)
-        {
-            setMaxDelay(maxDelay);
-            setDelay(delay);
-        }
-
-        public void setMaxDelay(int newMaxDelay)
-        {
-            Array.Resize(ref vec, newMaxDelay + 4);
-        }
-
-        public void setDelay(float newDelay)
-        {
-            this.delay = newDelay;
-            d0 = Mathf.FloorToInt(delay);
-            d1 = Mathf.CeilToInt(delay);
-            d2 = d1 + 1;
-            d3 = d1 + 2;
-
-            //Debug.Log("d0 " + d0);
-            //Debug.Log("d1 " + d1);
-            //Debug.Log("d2 " + d2);
-            //Debug.Log("d3 " + d3);
-
-            frac = delay - d0;
-        }
-
-        public float process(float value)
-        {
-            //Debug.Log(vec.Length);
-            //Debug.Log((index - d0) % vec.Length);
-            //Debug.Log(d0);
-            float y0 = vec[(index - d0) % vec.Length];
-            float y1 = vec[(index - d1) % vec.Length];
-            float y2 = vec[(index - d2) % vec.Length];
-            float y3 = vec[(index - d3) % vec.Length];
-            float x = frac;
-
-            //Debug.Log("0 " + (index - d0) % vec.Length);
-            //Debug.Log("1 " + (index - d1) % vec.Length);
-            //Debug.Log("2 " + (index - d2) % vec.Length);
-            //Debug.Log("3 " + (index - d3) % vec.Length);
-
-            float y =
-                ((x - 1) * (x - 2) * (x - 3)) / ((0 - 1) * (0 - 2) * (0 - 3)) * y0 +
-                ((x - 0) * (x - 2) * (x - 3)) / ((1 - 0) * (1 - 2) * (1 - 3)) * y1 +
-                ((x - 0) * (x - 1) * (x - 3)) / ((2 - 0) * (2 - 1) * (2 - 3)) * y2 +
-                ((x - 0) * (x - 1) * (x - 2)) / ((3 - 0) * (3 - 1) * (3 - 2)) * y3;
-
-            vec[index % vec.Length] = value;
-            index += 1;
-
-            return y;
-        }
-    }
-
     public class SDNnode
     {
         //public static float specularity;
@@ -1081,7 +987,6 @@ public class SDN : MonoBehaviour
             if (!wallName.Equals("Sphere"))
             {
                 wallFilter = wallFilt();
-                //specularity = 0.7f;
                 wallAbsCoeff = GameObject.Find(wallName).GetComponent<WallFiltAndGain>().wall_absorption_coeff;
                 nodeLoss = 1.0f - wallAbsCoeff; //quanto suono perde? Cioè tutto tranne quello assorbito dal muro
             }
@@ -1104,84 +1009,16 @@ public class SDN : MonoBehaviour
 
             filt = AudioMaterials.getMaterial(GameObject.Find(wallName).GetComponent<WallFiltAndGain>().wall_material);
             return filt;
-
-            //switch (GameObject.Find(wallName).GetComponent<WallFiltAndGain>().wall_material)
-            //{
-
-            //    case "concrete": // walls, hard surface average
-            //        return filt = new FourthOrderFilter(1, -3.52116135875940, 4.71769322757540, -2.85612549976053,   0.659726857770080, 0.975675045601632, -3.43354999748689,   4.59790176394788, -2.78225880232183,   0.642363879989748);
-            //    case "carpet": // carpet tile
-            //        return filt = new FourthOrderFilter(1, -1.08262757037834, -0.409156873201483,  0.393177044223513, 0.115374144111459, 0.557133737058345, -0.595471680050212, -0.198869264528946, 0.202098010808594, 0.0519704029964675);
-            //    case "glass": // double glass window
-            //        return filt = new FourthOrderFilter(1, -3.88157817484550,   5.67768298901651, -3.70995794379865,  0.913857561160056, 0.988950446602402, -3.84068106116436,   5.62070430601924, -3.67455649442745,   0.905586752101161);
-            //    case "gypsum": // perforated gypsum
-            //        return filt = new FourthOrderFilter(1, -3.56627223138536,   4.86547502358377, -3.01433043560409,   0.716117186547968, 0.489588360222364, -1.76575810943288,   2.43564604718648, -1.52441182610865,   0.365712142392197);
-            //    case "vinyl": // vinyl concrete
-            //        return filt = new FourthOrderFilter(1, -1.20321523440173, -0.152249555702279, 0.452752314993338, -0.0802737840229035, 0.951113234620835, -1.14521870903135, -0.126014399528383,  0.412593832519338, -0.0756816378410196);
-            //    case "wood": // wooden door
-            //        return filt = new FourthOrderFilter(1, -3.80539017238370,   5.45234860126098, -3.48668369576338,   0.839765796280106, 0.949092279345441, -3.61085651980882,   5.17248568134037, -3.30701292959816, 0.796328272495264);
-            //    case "rockfon": // rockfon panel
-            //        return filt = new FourthOrderFilter(1, -1.10082609915788, -0.197118900834112, 0.396353649853209, -0.0863017873494277, 0.604052413410784, -0.840106608467757, -0.0638796553407742, 0.478513769747507, -0.165417289996871);
-            //    case "priviwood":
-            //        return filt = new FourthOrderFilter(0.6876, -1.9207, 1.7899, -0.5567, 0, 1, -2.7618, 2.5368, -0.7749, 0);
-            //    case "butterworthLow":
-            //        return filt = new FourthOrderFilter(1.0000, 0.7821, 0.6800, 0.1827, 0.0301, 0.1672, 0.6687, 1.0031, 0.6687, 0.1672);
-            //    case "allpass":
-            //        return filt = new FourthOrderFilter(1.0000, 3.9978, 5.9934, 3.9934, 0.9978,0.9989, 3.9956, 5.9934, 3.9956, 0.9989);
-            //    default:
-            //        System.Console.WriteLine("Wall " + wallName + ": Non existing wall material.");
-            //        return filt = null;
-            //}
         }
 
         public void updateWallFilt()
         {
             wallFilter = AudioMaterials.getMaterial(GameObject.Find(wallName).GetComponent<WallFiltAndGain>().wall_material);
-            // update wall absoption filter coefficients
-            //switch (GameObject.Find(wallName).GetComponent<WallFiltAndGain>().wall_material)
-            //{
-
-            //    case "concrete": // walls, hard surface average
-            //        wallFilter = new FourthOrderFilter(1, -3.52116135875940, 4.71769322757540, -2.85612549976053, 0.659726857770080, 0.975675045601632, -3.43354999748689, 4.59790176394788, -2.78225880232183, 0.642363879989748);
-            //        break;
-            //    case "carpet": // carpet tile
-            //        wallFilter = new FourthOrderFilter(1, -1.08262757037834, -0.409156873201483, 0.393177044223513, 0.115374144111459, 0.557133737058345, -0.595471680050212, -0.198869264528946, 0.202098010808594, 0.0519704029964675);
-            //        break;
-            //    case "glass": // double glass window
-            //        wallFilter = new FourthOrderFilter(1, -3.88157817484550, 5.67768298901651, -3.70995794379865, 0.913857561160056, 0.988950446602402, -3.84068106116436, 5.62070430601924, -3.67455649442745, 0.905586752101161);
-            //        break;
-            //    case "gypsum": // perforated gypsum
-            //        wallFilter = new FourthOrderFilter(1, -3.56627223138536, 4.86547502358377, -3.01433043560409, 0.716117186547968, 0.489588360222364, -1.76575810943288, 2.43564604718648, -1.52441182610865, 0.365712142392197);
-            //        break;
-            //    case "vinyl": // vinyl concrete
-            //        wallFilter = new FourthOrderFilter(1, -1.20321523440173, -0.152249555702279, 0.452752314993338, -0.0802737840229035, 0.951113234620835, -1.14521870903135, -0.126014399528383, 0.412593832519338, -0.0756816378410196);
-            //        break;
-            //    case "wood": // wooden door
-            //        wallFilter = new FourthOrderFilter(1, -3.80539017238370, 5.45234860126098, -3.48668369576338, 0.839765796280106, 0.949092279345441, -3.61085651980882, 5.17248568134037, -3.30701292959816, 0.796328272495264);
-            //        break;
-            //    case "rockfon": // rockfon panel
-            //        wallFilter = new FourthOrderFilter(1, -1.10082609915788, -0.197118900834112, 0.396353649853209, -0.0863017873494277, 0.604052413410784, -0.840106608467757, -0.0638796553407742, 0.478513769747507, -0.165417289996871);
-            //        break;
-            //    case "priviwood":
-            //        wallFilter = new FourthOrderFilter(0.6876, -1.9207, 1.7899, -0.5567, 0, 1, -2.7618, 2.5368, -0.7749, 0);
-            //        break;
-            //    case "butterworthLow":
-            //        wallFilter = new FourthOrderFilter(1.0000, 0.7821, 0.6800, 0.1827, 0.0301,0.1672, 0.6687, 1.0031, 0.6687, 0.1672);
-            //        break;
-            //    case "allpass":
-            //        wallFilter = new FourthOrderFilter(0.9989, 3.9956, 5.9934, 3.9956, 0.9989, 1.0000, 3.9978, 5.9934, 3.9934, 0.9978);
-            //        break;
-            //    default:
-            //        System.Console.WriteLine("Wall " + wallName + ": Non existing wall material.");
-            //        wallFilter = null;
-            //        break;
-            //}
 
             // update wall absorption coefficient and node loss
             setWallAbs(GameObject.Find(wallName).GetComponent<WallFiltAndGain>().wall_absorption_coeff);
             setLoss(1.0f - wallAbsCoeff);
 
-            //Debug.Log("Updated wall " + wallName + " absCoeff " + wallAbsCoeff + " filter " + GameObject.Find(wallName).GetComponent<WallFiltAndGain>().wall_material);
         }
 
         public int getWallNumber()
@@ -1199,11 +1036,6 @@ public class SDN : MonoBehaviour
         {
             nodeLoss = loss;
         }
-
-        //public static void setSpecularity(float spec)
-        //{
-        //    specularity = spec;
-        //}
 
         public static void setWallAbs(float abs)
         {
@@ -1225,13 +1057,8 @@ public class SDN : MonoBehaviour
         {
             FOSample = incoming.read();
             FOSample *= incomingAttFactor; // divido per il numero di muri, perchè l'energia viene divisa in N pezzi
-            /*
-             Se RIGA COMMENTATA, BYPASSATO IL MATERIALE!!!!!!!!!
-             */
+            //Se RIGA successiva viene commentata posso bypassare il materiale
             FOSample = wallFilter.Transform(FOSample);
-            
-            
-            //FOSample *= wallAbsCoeff; //Il sample lo moltiplico per l'assorbimento del muro
 
             //Calcolo il coefficiente simile al reale
 
@@ -1254,25 +1081,16 @@ public class SDN : MonoBehaviour
 
                 for (j = 0; j < numConnections; j++)
                 {
-
-                    //Debug.Log("ScattFact = " + scatteringFactor + " -- NegFact = " + scatteringFactorDiag);
-
                     if (i == j)
                     {
-                        //connections[i].negSamp += connections[j].posSamp * -0.5f;
-
                         connections[i].negSamp += connections[j].posSamp * scatteringFactorDiag;
                     }
                     else
                     {
                         connections[i].negSamp += connections[j].posSamp * scatteringFactor;
-
-                        //connections[i].negSamp += connections[j].posSamp * 0.3f;
                     }
                 }
 
-                //				connections [i].negSamp = connections [i].connectFilter.Transform (connections [i].negSamp);
-                //				connections [i].negSamp = connections [i].junctionFilters[i].Transform (connections [i].negSamp);
                 connections[i].negSamp -= connections[i].prevSample;
                 connections[i].inputToDelay(connections[i].negSamp);
                 connections[i].prevSample = connections[i].negSamp;
@@ -1297,7 +1115,6 @@ public class SDN : MonoBehaviour
         {
             
             int minCon = connections.Count + 1;
-            //            Debug.Log(minCon);
             //scatteringFactor = (2.0f / minCon) - nodeLoss;
             scatteringFactor = ((2.0f / minCon));
             //scatteringFactorDiag = ((2.0f - minCon) / minCon) - -nodeLoss;

@@ -40,6 +40,7 @@
      <Compile Include="Assets/SDNLib/Lib/WallFiltAndGain.cs" />
      <Compile Include="Assets/SDNLib/SDNEnvConfig.cs" />
      <Compile Include="Assets/SDNLib/Lib/AudioMaterials.cs" />
+     <Compile Include="Assets/SDNLib/Lib/VariableDelayLine.cs" />
      <Compile Include="Assets/SDNLib/audioRec.cs" />
      <Compile Include="Assets/SDNLib/SourceBuilder.cs" />
      <Compile Include="Assets/SDNLib/Lib/reflectionFinder.cs" />

@@ -22,7 +22,7 @@ public class RoomBuilder : MonoBehaviour
             //Debug.Log(child.name);
             GameObject.DestroyImmediate(gameObject.transform.GetChild(0).gameObject);
         }
-
+        
         //Floor;
         GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         plane.transform.localPosition = new Vector3(0, 0, 0);

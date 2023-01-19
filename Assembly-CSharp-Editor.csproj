@@ -39,6 +39,7 @@
      <Compile Include="Assets/Editor/Wall_class.cs" />
      <Compile Include="Assets/Editor/Source_class.cs" />
      <Compile Include="Assets/Editor/Room_class.cs" />
+     <Compile Include="Assets/Editor/SDNEnv_class.cs" />
     <Reference Include="UnityEngine">
         <HintPath>/Applications/Unity/Hub/Editor/2021.3.7f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

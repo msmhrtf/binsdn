@@ -6,12 +6,22 @@ using System;
 using System.IO;
 using System.Linq;
 
+
+
+public struct HRTFData
+{
+    public AForge.Math.Complex[][] HRTFs;
+    public float[] Delays;
+}
 public class SDNEnvConfig : MonoBehaviour
 {
     public string CIPIC;
     public bool UsePersonalizedSDN = true;
     public bool UsePersistentDataPath = false;
     //public HRTFcontainer HRTFCamera;
+    public bool UseNewestSubject = false;
+
+
 
 
 
@@ -38,8 +48,11 @@ public class SDNEnvConfig : MonoBehaviour
     private AForge.Math.Complex[][][] matrix_r = new AForge.Math.Complex[azNum][][]; // right hrtf 3d matrix, as in Matlab
 
     // Delaunay triangles and points (in Matlab)
-    private int[][] triangles = new int[2652][]; // 2652 x 3
-    private float[][] points = new float[1404][]; // 1404 x 2
+    private int[][] triangles = new int[2652][]; // 2652 x 3-> punto1, punto2, punto3 datio in base alla posizione su points
+    private float[][] points = new float[1404][]; // 1404 x 2-> azimuth e elevation?
+
+    //private int[][] itds = new int[1404][]; // 1404 righe x 2-> itd left e right
+    private float[] headsize = new float[2];
 
     // interp param
     float g1, g2, g3, det;
@@ -52,19 +65,48 @@ public class SDNEnvConfig : MonoBehaviour
     public int BufferSize = 1024;
     public int SystemSampleRate = 44100;
 
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q)) {
-            useKemarHRTF();
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            SwitchHRTF(CIPIC);
-        }
-    }
+
+
+
+
+
+
+
+
 
     private void Awake()
     {
+
+    
+        string folderdelimit = "/";
+        #if (UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN)
+                         folderdelimit = "\\";
+        #endif
+
+        if(UsePersistentDataPath){
+            if(!UseNewestSubject)
+            Debug.Log("Using your Persistend Data Path-->" + Application.persistentDataPath);
+        }
+
+        //if use persistentdatapath get newest directory inside and print it
+        if(UsePersistentDataPath && UseNewestSubject){
+            string[] dirs = Directory.GetDirectories(Application.persistentDataPath);
+            string newestDir = dirs[0];
+            foreach(string dir in dirs){
+                if(Directory.GetCreationTime(dir) > Directory.GetCreationTime(newestDir)){
+                    newestDir = dir;
+                }
+            }
+            
+            //take the last folder name
+            String last = newestDir.Split(folderdelimit).Last();
+            //remove the last 4 char from the string and the first 7
+            last = last.Substring(7, last.Length-11);
+            Debug.Log("Using NewestSubject in Persistend Data Path-->" + last);
+            CIPIC = last;
+        }
+
+
         AudioConfiguration AC = AudioSettings.GetConfiguration();
         AC.dspBufferSize = BufferSize;
         AC.sampleRate = SystemSampleRate;
@@ -80,6 +122,8 @@ public class SDNEnvConfig : MonoBehaviour
         int lats = buffSize*1000/AC.sampleRate;
         Debug.Log("SDN Lib correctly started at " + AC.sampleRate + "Hz with sample buffer " + AC.dspBufferSize+". Latency is " + lats +"ms");
 
+        SwitchHRTF(CIPIC);
+        /*
         for (int i = 0; i < matrix_l.Length; i++)
         {
             matrix_l[i] = new AForge.Math.Complex[elNum][];
@@ -108,19 +152,14 @@ public class SDNEnvConfig : MonoBehaviour
 
         TextAsset[] txt_a;
 
-        string folderdelimit = "/";
-        #if (UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN)
-                         folderdelimit = "\\";
-        #endif
-
 
         if (!UsePersistentDataPath)
         {
             txt_a = Resources.LoadAll<TextAsset>("subject" + cipic_subject + "_txt");
         }
         else {
-            Debug.Log("Using your Persistend Data Path-->" + Application.persistentDataPath + folderdelimit + "subject_txt");
-            string[] files = Directory.GetFiles(Application.persistentDataPath + folderdelimit + "subject_txt", "*.txt");
+            Debug.Log("Using your Persistend Data Path-->" + Application.persistentDataPath + folderdelimit + "subject" + cipic_subject + "_txt");
+            string[] files = Directory.GetFiles(Application.persistentDataPath + folderdelimit + "subject" + cipic_subject + "_txt", "*.txt");
             txt_a = new TextAsset[files.Length];
             for (int i = 0; i < files.Length; i++) {
                 txt_a[i] = new TextAsset(File.ReadAllText(files[i]));
@@ -128,8 +167,9 @@ public class SDNEnvConfig : MonoBehaviour
             }
         }
 
-
-        int i_l = 0, i_r = 0, j = 0, k = 0;      //j_l = 0, j_r = 0, k_l = 0, k_r = 0;
+        //LOAD HRTF IMPULSES AND DO FFT
+        int i_l = 0, i_r = 0, k = 0;      //j_l = 0, j_r = 0, k_l = 0, k_r = 0;
+        int j = 0;
 
         foreach (TextAsset txtfile in txt_a)
         {
@@ -139,6 +179,10 @@ public class SDNEnvConfig : MonoBehaviour
 
             j = 0;
             k = 0;
+
+            int itds_id_l = 0;
+            int itds_id_r = 0;
+
 
             if (fileName[0].Equals('L') == true)
             {
@@ -155,6 +199,9 @@ public class SDNEnvConfig : MonoBehaviour
                         matrix_l[i_l][j][k] = new AForge.Math.Complex(float.Parse(col.Trim(), System.Globalization.NumberStyles.Float), 0);
                         k++;
                     }
+                    //matrix_l[i_l][j] = getMovedHRTF(matrix_l[i_l][j],itds_id_l,0);
+                    itds_id_l++;
+                        
                     // compute fft
                     AForge.Math.FourierTransform.FFT(matrix_l[i_l][j], AForge.Math.FourierTransform.Direction.Forward);
                     j++;
@@ -175,92 +222,83 @@ public class SDNEnvConfig : MonoBehaviour
                         matrix_r[i_r][j][k] = new AForge.Math.Complex(float.Parse(col.Trim(), System.Globalization.NumberStyles.Float), 0);
                         k++;
                     }
+                    //matrix_r[i_r][j] = getMovedHRTF(matrix_r[i_r][j], itds_id_r, 1);
+                    itds_id_r++;
                     // compute fft
                     AForge.Math.FourierTransform.FFT(matrix_r[i_r][j], AForge.Math.FourierTransform.Direction.Forward);
                     j++;
                 }
                 i_r++;
             }
-            else
+            else if(fileName[0].Equals('h') == true)
             {
+                //
+                //Load Head Dimensions
+                //
+
+                //Insert head size into the array
+                string[] size = txtfile.text.Split(' ');
+                headsize[0] = (int)float.Parse(size[0].Trim(), System.Globalization.NumberStyles.Float); //X1
+                headsize[1] = (int)float.Parse(size[1].Trim(), System.Globalization.NumberStyles.Float); //X3
+                Debug.Log("Head size is " + headsize[0] + "x" + headsize[1] + "cm");
                 //Debug.Log("WARNING! This file is not in the correct format!");
                 //break;
+            }else if(fileName[0].Equals('t') == true){
+                // LOAD triangles and points
+                for (int i = 0; i < triangles.Length; i++)
+                {
+                    triangles[i] = new int[3];
+                }
+                
+
+                
+                j = 0;
+                foreach (var row in txtfile.text.Split('\n'))
+                {
+                    if (j == 2652)
+                    {
+                        break;
+                    }
+                    k = 0;
+                    foreach (var col in row.Trim().Split(' '))
+                    {
+                        triangles[j][k] = int.Parse(col.Trim(), System.Globalization.NumberStyles.Integer);
+                        k++;
+                    }
+                    j++;
+                }
+            }else if(fileName[0].Equals('p') == true){
+                // points
+                for (int i = 0; i < points.Length; i++)
+                {
+                    points[i] = new float[2];
+                }
+
+                j = 0;
+                foreach (var row in txtfile.text.Split('\n'))
+                {
+                    if (j == 1404)
+                    {
+                        break;
+                    }
+                    k = 0;
+                    foreach (var col in row.Trim().Split(' '))
+                    {
+                        points[j][k] = float.Parse(col.Trim(), System.Globalization.NumberStyles.Float);
+                        k++;
+                    }
+                    j++;
+                }
+            }else{
+                Debug.Log("File " + fileName + " is not in the correct format!");
             }
-
+        
         }
-
-        // LOAD triangles and points
-        for (int i = 0; i < triangles.Length; i++)
-        {
-            triangles[i] = new int[3];
-        }
-        for (int i = 0; i < points.Length; i++)
-        {
-            points[i] = new float[2];
-        }
-        // triangles
-
-//        Debug.Log("subject" + cipic_subject + "_txt/triangles/triangles");
-        TextAsset triang;
 
         
 
-        if (!UsePersistentDataPath)
-        {
-            triang = Resources.Load<TextAsset>("subject" + cipic_subject + "_txt/triangles/triangles");
-            textFile = triang.text;
-        }
-        else
-        {
-            string[] files = Directory.GetFiles(Application.persistentDataPath + folderdelimit + "subject_txt" + folderdelimit + "triangles", "*.txt");
-            textFile = File.ReadAllText(files[0]);
-        }
-
-
-        j = 0;
-        foreach (var row in textFile.Split('\n'))
-        {
-            if (j == 2652)
-            {
-                break;
-            }
-            k = 0;
-            foreach (var col in row.Trim().Split(' '))
-            {
-                triangles[j][k] = int.Parse(col.Trim(), System.Globalization.NumberStyles.Integer);
-                k++;
-            }
-            j++;
-        }
-        // points
-        TextAsset punti;
-
-        if (!UsePersistentDataPath)
-        {
-            punti = Resources.Load<TextAsset>("subject" + cipic_subject + "_txt/points/points");
-            textFile = punti.text;
-        }
-        else
-        {
-            string[] files = Directory.GetFiles(Application.persistentDataPath + folderdelimit + "subject_txt" + folderdelimit + "points", "*.txt");
-            textFile = File.ReadAllText(files[0]);
-        }
-
-        j = 0;
-        foreach (var row in textFile.Split('\n'))
-        {
-            if (j == 1404)
-            {
-                break;
-            }
-            k = 0;
-            foreach (var col in row.Trim().Split(' '))
-            {
-                points[j][k] = float.Parse(col.Trim(), System.Globalization.NumberStyles.Float);
-                k++;
-            }
-            j++;
-        }
+        
+        
 
         for (int i = 0; i < indices.Length; i++)
         {
@@ -270,223 +308,35 @@ public class SDNEnvConfig : MonoBehaviour
         invT = new float[4];
         X = new float[2];
 
+
+
         // flag
         loaded = true;
 
 
-        if (UsePersistentDataPath)
+        if (!UsePersistentDataPath)
         {
-            Debug.Log("HRTF dataset loaded ! CIPIC subject ID: " + cipic_subject);
+            Debug.Log("HRTF dataset loaded! CIPIC subject ID: " + cipic_subject);
         }
         else {
             Debug.Log("External HRTF dataset correctly loaded!");
         }
-
-    }
-
-    public void useKemarHRTF()
-    {
-        SwitchHRTF("165");
+*/
     }
 
 
-    public void SwitchHRTF(string id){
-        for (int i = 0; i < matrix_l.Length; i++)
-        {
-            matrix_l[i] = new AForge.Math.Complex[elNum][];
-            matrix_r[i] = new AForge.Math.Complex[elNum][];
-            for (int jj = 0; jj < matrix_l[i].Length; jj++)
-            {
-                matrix_l[i][jj] = new AForge.Math.Complex[fftLength];
-                matrix_r[i][jj] = new AForge.Math.Complex[fftLength];
-            }
-        }
-
-        cipic_subject = id; // KEMAR HATS with small pinnae
-
-        string textFile; // 2d text file containing left and right hrtfs for a specific azimuth
-        string fileName;
-
-        TextAsset[] txt_a;
-
-        string folderdelimit = "/";
-
-        #if (UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN)
-                                 folderdelimit = "\\";
-        #endif
-
-
-        if (!UsePersistentDataPath)
-        {
-            txt_a = Resources.LoadAll<TextAsset>("subject" + cipic_subject + "_txt");
-        }
-        else
-        {
-            Debug.Log("Using your Persistend Data Path-->" + Application.persistentDataPath + folderdelimit + "subject_txt");
-            string[] files = Directory.GetFiles(Application.persistentDataPath + folderdelimit + "subject_txt", "*.txt");
-            txt_a = new TextAsset[files.Length];
-            for (int i = 0; i < files.Length; i++)
-            {
-                txt_a[i] = new TextAsset(File.ReadAllText(files[i]));
-                txt_a[i].name = files[i].Split(folderdelimit).Last();
-            }
-        }
-
-
-        int i_l = 0, i_r = 0, j = 0, k = 0;
-
-        foreach (TextAsset txtfile in txt_a)
-        {
-
-            fileName = txtfile.name;
-            textFile = txtfile.text;
-
-            j = 0;
-            k = 0;
-
-            if (fileName[0].Equals('L') == true)
-            {
-                foreach (var row in textFile.Split('\n'))
-                {
-                    if (j == elNum)
-                    {
-                        break;
-                    }
-                    k = 0;
-
-                    foreach (var col in row.Trim().Split(' '))
-                    {
-                        matrix_l[i_l][j][k] = new AForge.Math.Complex(float.Parse(col.Trim(), System.Globalization.NumberStyles.Float), 0);
-                        k++;
-                    }
-                    // compute fft
-                    AForge.Math.FourierTransform.FFT(matrix_l[i_l][j], AForge.Math.FourierTransform.Direction.Forward);
-                    j++;
-                }
-                i_l++;
-            }
-            else if (fileName[0].Equals('R') == true)
-            {
-                foreach (var row in textFile.Split('\n'))
-                {
-                    if (j == elNum)
-                    {
-                        break;
-                    }
-                    k = 0;
-                    foreach (var col in row.Trim().Split(' '))
-                    {
-                        matrix_r[i_r][j][k] = new AForge.Math.Complex(float.Parse(col.Trim(), System.Globalization.NumberStyles.Float), 0);
-                        k++;
-                    }
-                    // compute fft
-                    AForge.Math.FourierTransform.FFT(matrix_r[i_r][j], AForge.Math.FourierTransform.Direction.Forward);
-                    j++;
-                }
-                i_r++;
-            }
-            else
-            {
-                //Debug.Log("WARNING! This file is not in the correct format!");
-                //break;
-            }
-
-        }
-
-        // LOAD triangles and points
-        for (int i = 0; i < triangles.Length; i++)
-        {
-            triangles[i] = new int[3];
-        }
-        for (int i = 0; i < points.Length; i++)
-        {
-            points[i] = new float[2];
-        }
-        // triangles
-
-        //        Debug.Log("subject" + cipic_subject + "_txt/triangles/triangles");
-        TextAsset triang;
 
 
 
-        if (!UsePersistentDataPath)
-        {
-            triang = Resources.Load<TextAsset>("subject" + cipic_subject + "_txt/triangles/triangles");
-            textFile = triang.text;
-        }
-        else
-        {
-            string[] files = Directory.GetFiles(Application.persistentDataPath + folderdelimit + "subject_txt" + folderdelimit + "triangles", "*.txt");
-            textFile = File.ReadAllText(files[0]);
-        }
 
 
-        j = 0;
-        foreach (var row in textFile.Split('\n'))
-        {
-            if (j == 2652)
-            {
-                break;
-            }
-            k = 0;
-            foreach (var col in row.Trim().Split(' '))
-            {
-                triangles[j][k] = int.Parse(col.Trim(), System.Globalization.NumberStyles.Integer);
-                k++;
-            }
-            j++;
-        }
-        // points
-        TextAsset punti;
-
-        if (!UsePersistentDataPath)
-        {
-            punti = Resources.Load<TextAsset>("subject" + cipic_subject + "_txt/points/points");
-            textFile = punti.text;
-        }
-        else
-        {
-            string[] files = Directory.GetFiles(Application.persistentDataPath + folderdelimit + "subject_txt" + folderdelimit + "points", "*.txt");
-            textFile = File.ReadAllText(files[0]);
-        }
-
-        j = 0;
-        foreach (var row in textFile.Split('\n'))
-        {
-            if (j == 1404)
-            {
-                break;
-            }
-            k = 0;
-            foreach (var col in row.Trim().Split(' '))
-            {
-                points[j][k] = float.Parse(col.Trim(), System.Globalization.NumberStyles.Float);
-                k++;
-            }
-            j++;
-        }
-
-        for (int i = 0; i < indices.Length; i++)
-        {
-            indices[i] = new int[2];
-        }
-        T = new float[4];
-        invT = new float[4];
-        X = new float[2];
-
-        // flag
-        loaded = true;
 
 
-        if (UsePersistentDataPath)
-        {
-            Debug.Log("HRTF dataset loaded ! CIPIC subject ID: " + cipic_subject);
-        }
-        else
-        {
-            Debug.Log("External HRTF dataset correctly loaded!");
-        }
-    }
+
+
+
+
+
 
     public AForge.Math.Complex[] getHRTF_left(int index1, int index2)
     {
@@ -498,12 +348,7 @@ public class SDNEnvConfig : MonoBehaviour
         return matrix_r[index1][index2];
     }
 
-    public AForge.Math.Complex[][] getInterpolated_HRTF(float[] aziEle)
-    // Returns the interpolated HRTFs which are a linear combination of HRTFs A, B and C weighted by g1, g2 and g3, respectively.
-    // Algorithm from Hannes Gamper, "Head-related transfer function interpolation in azimuth, elevation, and distance" (2013): https://asa.scitation.org/doi/pdf/10.1121/1.4828983
-    // The following implementation is based on a JavaScript implementation of Tomasz Woźniak: https://github.com/tmwoz/hrtf-panner-js 
-    {
-        
+    public HRTFData getInterpolated_HRTFDatas(float[] aziEle){
 
         // Variables initialisation
         int i, j;
@@ -549,12 +394,81 @@ public class SDNEnvConfig : MonoBehaviour
                     interpHrtf[0][j] = g1 * matrix_l[indices[0][0]][indices[0][1]][j] + g2 * matrix_l[indices[1][0]][indices[1][1]][j] + g3 * matrix_l[indices[2][0]][indices[2][1]][j];
                     interpHrtf[1][j] = g1 * matrix_r[indices[0][0]][indices[0][1]][j] + g2 * matrix_r[indices[1][0]][indices[1][1]][j] + g3 * matrix_r[indices[2][0]][indices[2][1]][j];
                 }
-                return interpHrtf;
+                break;
             }
             i--;
         }
-        return interpHrtf;
+
+        HRTFData tmp = new HRTFData();
+        tmp.HRTFs = interpHrtf;
+        tmp.Delays = getInterpolated_ITDs(aziEle);
+
+        return tmp;
     }
+
+    public float[] getInterpolated_ITDs(float[] aziEle){
+
+        //Computes the ITD for a spherical head
+        //theta is the angle between the source and the head axis
+        //a is the radius of the head
+        //fs is the sampling frequency
+        //returns the delay in samples
+
+        //ITD from Duda and Brown
+        //in cascade after the head shadow filter
+        //here we use vertical-polar coordinate system -> theta [-180; 180]
+
+        //Debug.Log("theta = " + theta);
+
+        //Calculate left ear angle
+        float thetaL = aziEle[0] + 90;
+        //calculate right ear angle
+        float thetaR = aziEle[0] - 90;
+
+        double c = 343;
+
+        //convert theta to radiants
+        thetaL = thetaL * (float)Math.PI / 180.0f;
+        thetaR = thetaR * (float)Math.PI / 180.0f;
+
+        //optimal head radius
+        float a = (0.41f*headsize[0]/2 + 0.22f*headsize[1]/2 + 3.7f) / 100;
+        
+        double ac = a/c;
+
+        double delayL, delayR;
+
+        if (Mathf.Abs(thetaL) < Mathf.PI/2){
+            // adding ac to the result in order to have positive delays and keep the system causal, the ITD stays the same.
+            delayL = -ac*Mathf.Cos(thetaL)+ac;
+        }else{  //è corretto?
+            delayL = ac*(Mathf.Abs(thetaL)-Mathf.PI/2)+ac;
+        }
+
+        if (Mathf.Abs(thetaR) < Mathf.PI/2){
+            // adding ac to the result in order to have positive delays and keep the system causal, the ITD stays the same.
+            delayR = -ac*Mathf.Cos(thetaR)+ac;
+        }else{  //è corretto?
+            delayR = ac*(Mathf.Abs(thetaR)-Mathf.PI/2)+ac;
+        }
+
+
+        //convert time-delays to samples
+        float[] delay_samp = {(float)(delayL*SystemSampleRate), (float)(delayR*SystemSampleRate)};
+
+        return delay_samp;
+
+    }
+
+    
+
+    /*public int[] getInterpolated_ITDs(float[] azEl){
+        int[] indexes = getIndices(azEl[0], azEl[1]);
+        //Debug.Log("Ids: " + indexes[0] + "--" + indexes[1]);
+        //Indexes[0] è il calore sulla X (azimuth ANGLE)
+        //Indexes[1] è il valore sulla Y (elevation ANGLE)
+        return itds[indexes[0]*52 + indexes[1]];
+    }*/
 
     public int[] getIndices(float azimuth, float elevation) // get the matrix indices relative to azimuth (0) and elevation (1)
     {
@@ -588,4 +502,202 @@ public class SDNEnvConfig : MonoBehaviour
     {
         return loaded;
     }
+
+
+    public void SwitchHRTF(string id){
+        for (int i = 0; i < matrix_l.Length; i++)
+        {
+            matrix_l[i] = new AForge.Math.Complex[elNum][];
+            matrix_r[i] = new AForge.Math.Complex[elNum][];
+            for (int jj = 0; jj < matrix_l[i].Length; jj++)
+            {
+                matrix_l[i][jj] = new AForge.Math.Complex[fftLength];
+                matrix_r[i][jj] = new AForge.Math.Complex[fftLength];
+            }
+        }
+
+        cipic_subject = id; // KEMAR HATS with small pinnae
+
+        string textFile; // 2d text file containing left and right hrtfs for a specific azimuth
+        string fileName;
+
+        TextAsset[] txt_a;
+
+        string folderdelimit = "/";
+
+        #if (UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN)
+                                 folderdelimit = "\\";
+        #endif
+
+        if (!UsePersistentDataPath)
+        {
+            txt_a = Resources.LoadAll<TextAsset>("subject" + cipic_subject + "_txt");
+        }
+        else {
+            //Debug.Log("Using your Persistend Data Path-->" + Application.persistentDataPath + folderdelimit + "subject" + cipic_subject + "_txt");
+            string[] files = Directory.GetFiles(Application.persistentDataPath + folderdelimit + "subject" + cipic_subject + "_txt", "*.txt");
+            txt_a = new TextAsset[files.Length];
+            for (int i = 0; i < files.Length; i++) {
+                txt_a[i] = new TextAsset(File.ReadAllText(files[i]));
+                txt_a[i].name = files[i].Split(folderdelimit).Last();
+            }
+        }
+
+        //LOAD HRTF IMPULSES AND DO FFT
+        int i_l = 0, i_r = 0, k = 0;      //j_l = 0, j_r = 0, k_l = 0, k_r = 0;
+        int j = 0;
+
+        foreach (TextAsset txtfile in txt_a)
+        {
+
+            fileName = txtfile.name;
+            textFile = txtfile.text;
+
+            j = 0;
+            k = 0;
+
+            int itds_id_l = 0;
+            int itds_id_r = 0;
+
+
+            if (fileName[0].Equals('L') == true)
+            {
+                foreach (var row in textFile.Split('\n'))
+                {
+                    if (j == elNum)
+                    {
+                        break;
+                    }
+                    k = 0;
+
+                    foreach (var col in row.Trim().Split(' '))
+                    {
+                        matrix_l[i_l][j][k] = new AForge.Math.Complex(float.Parse(col.Trim(), System.Globalization.NumberStyles.Float), 0);
+                        k++;
+                    }
+                    //matrix_l[i_l][j] = getMovedHRTF(matrix_l[i_l][j],itds_id_l,0);
+                    itds_id_l++;
+                        
+                    // compute fft
+                    AForge.Math.FourierTransform.FFT(matrix_l[i_l][j], AForge.Math.FourierTransform.Direction.Forward);
+                    j++;
+                }
+                i_l++;
+            }
+            else if (fileName[0].Equals('R') == true)
+            {
+                foreach (var row in textFile.Split('\n'))
+                {
+                    if (j == elNum)
+                    {
+                        break;
+                    }
+                    k = 0;
+                    foreach (var col in row.Trim().Split(' '))
+                    {
+                        matrix_r[i_r][j][k] = new AForge.Math.Complex(float.Parse(col.Trim(), System.Globalization.NumberStyles.Float), 0);
+                        k++;
+                    }
+                    //matrix_r[i_r][j] = getMovedHRTF(matrix_r[i_r][j], itds_id_r, 1);
+                    itds_id_r++;
+                    // compute fft
+                    AForge.Math.FourierTransform.FFT(matrix_r[i_r][j], AForge.Math.FourierTransform.Direction.Forward);
+                    j++;
+                }
+                i_r++;
+            }
+            else if(fileName[0].Equals('h') == true)
+            {
+                //
+                //Load Head Dimensions
+                //
+
+                //Insert head size into the array
+                string[] size = txtfile.text.Split(' ');
+                headsize[0] = (int)float.Parse(size[0].Trim(), System.Globalization.NumberStyles.Float); //X1
+                headsize[1] = (int)float.Parse(size[1].Trim(), System.Globalization.NumberStyles.Float); //X3
+                //Debug.Log("Head size is " + headsize[0] + "x" + headsize[1] + "cm");
+                //Debug.Log("WARNING! This file is not in the correct format!");
+                //break;
+            }else if(fileName[0].Equals('t') == true){
+                // LOAD triangles and points
+                for (int i = 0; i < triangles.Length; i++)
+                {
+                    triangles[i] = new int[3];
+                }
+                
+
+                
+                j = 0;
+                foreach (var row in txtfile.text.Split('\n'))
+                {
+                    if (j == 2652)
+                    {
+                        break;
+                    }
+                    k = 0;
+                    foreach (var col in row.Trim().Split(' '))
+                    {
+                        triangles[j][k] = int.Parse(col.Trim(), System.Globalization.NumberStyles.Integer);
+                        k++;
+                    }
+                    j++;
+                }
+            }else if(fileName[0].Equals('p') == true){
+                // points
+                for (int i = 0; i < points.Length; i++)
+                {
+                    points[i] = new float[2];
+                }
+
+                j = 0;
+                foreach (var row in txtfile.text.Split('\n'))
+                {
+                    if (j == 1404)
+                    {
+                        break;
+                    }
+                    k = 0;
+                    foreach (var col in row.Trim().Split(' '))
+                    {
+                        points[j][k] = float.Parse(col.Trim(), System.Globalization.NumberStyles.Float);
+                        k++;
+                    }
+                    j++;
+                }
+            }else{
+                Debug.Log("File " + fileName + " is not in the correct format!");
+            }
+
+        }
+
+        
+
+        
+        
+
+        for (int i = 0; i < indices.Length; i++)
+        {
+            indices[i] = new int[2];
+        }
+        T = new float[4];
+        invT = new float[4];
+        X = new float[2];
+
+
+
+        // flag
+        loaded = true;
+
+
+        if (!UsePersistentDataPath)
+        {
+            Debug.Log("HRTF dataset loaded! CIPIC subject ID: " + cipic_subject);
+        }
+        else {
+            Debug.Log("External HRTF " + cipic_subject + " dataset correctly loaded!");
+        }
+        
+    }
+
 }

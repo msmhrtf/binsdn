@@ -145,18 +145,21 @@ public class CrossfadeBuffer
 
 
     StereoVariableDelayLine delayLine;
-    public float[][] getFromBuffer(Complex[] data, Complex[][] hrtfs)
+    public float[][] getFromBuffer(Complex[] data, Complex[][] hrtfs, float[] delays)
     {
-
+        //resetInput = true; //questa linea bypassa data
+        
         if (resetInput)
         {
             for (int i = 0; i < buffSize; i++)
             {
                 //data[i].Re = (Mathf.Sin(2 * Mathf.PI * 2 * i / (buffSize)) + Mathf.Sin(2 * Mathf.PI * i / (buffSize)))/2;
-                data[i].Re = Mathf.Sin(2 * Mathf.PI * 2 * i / (buffSize));
+                data[i].Re = Mathf.Sin(2 * Mathf.PI * 2 * i / (buffSize)) * 0.5;
                 //data[i].Re = 1;
             }
         }
+
+        //Debug.Log(delays[1]);
 
         for (int i = 0; i < tempWindow.Length; i++)
         {
@@ -214,9 +217,10 @@ public class CrossfadeBuffer
 
         FourierTransform.FFT(tempWindow[0], FourierTransform.Direction.Backward);
 
+        //Nuova HRTF
         FourierTransform.FFT(tempWindow[1], FourierTransform.Direction.Backward);
         FourierTransform.FFT(tempWindow[2], FourierTransform.Direction.Backward);
-
+        //Vecchia HRTF
         FourierTransform.FFT(tempWindow[3], FourierTransform.Direction.Backward);
         FourierTransform.FFT(tempWindow[4], FourierTransform.Direction.Backward);
 
@@ -226,8 +230,17 @@ public class CrossfadeBuffer
         for (int i = 0; i < overlap; i++)
         {
           
-            outData[0][i] = (outBuffer[0][i]) + (float)tempWindow[3][i].Re * window[overlap + i] + (float)tempWindow[1][i].Re * window[i];
-            outData[1][i] = (outBuffer[1][i]) + (float)tempWindow[4][i].Re * window[overlap + i] + (float)tempWindow[2][i].Re * window[i];
+            //outData[0][i] = (outBuffer[0][i]) + (float)tempWindow[3][i].Re * window[overlap + i] + (float)tempWindow[1][i].Re * window[i];
+            //outData[1][i] = (outBuffer[1][i]) + (float)tempWindow[4][i].Re * window[overlap + i] + (float)tempWindow[2][i].Re * window[i];
+
+            //Prova errata
+            //outData[0][i] = (float)tempWindow[3][i].Re * window[overlap + i] + ((float)tempWindow[1][i].Re + outBuffer[0][i]) * window[i];
+            //outData[1][i] = (float)tempWindow[4][i].Re * window[overlap + i] + ((float)tempWindow[2][i].Re + outBuffer[1][i]) * window[i];
+
+            //Provo a mettere il buffer alla fine
+            outData[0][i] = (outBuffer[0][i]) + (float)tempWindow[1][i].Re * window[i];
+            outData[1][i] = (outBuffer[1][i]) + (float)tempWindow[2][i].Re * window[i];
+
 
 
         }
@@ -278,22 +291,57 @@ public class CrossfadeBuffer
             outData[0][i + buffSize / 2] = a;
             outData[1][i + buffSize / 2] = b;
 
+            //Bypasso temporaneamente
+            //outBuffer[0][i] = (float)tempWindow[1][i + buffSize/2].Re;
+            //outBuffer[1][i] = (float)tempWindow[2][i + buffSize/2].Re;
+        }
+
+        //effettuo il crossfade, spostato alla fine per poter applicare correttamente il delay
+        for (int i = 0; i < overlap; i++)
+        {
+
+            outData[0][i] = (outBuffer[0][i]) + (float)tempWindow[3][i].Re * window[overlap + i] + outData[0][i] * window[i];
+            outData[1][i] = (outBuffer[1][i]) + (float)tempWindow[4][i].Re * window[overlap + i] + outData[1][i] * window[i];
+
+          
+            //outData[0][i] = (float)tempWindow[3][i].Re * window[overlap + i] + outData[0][i] * window[i];
+            //outData[1][i] = (float)tempWindow[4][i].Re * window[overlap + i] + outData[1][i] * window[i];
+        }
+
+        //Copio l'outbuffer corretto
+        for (int i = 0; i < buffSize/2; i++)
+        {
             /*Canale destro?*/
             outBuffer[0][i] = (float)tempWindow[1][i + buffSize/2].Re;
             /*Canale sinistro?*/
             outBuffer[1][i] = (float)tempWindow[2][i + buffSize/2].Re;
         }
 
+
         old_hrtfs = Util_CopyArrayLinq(hrtfs);
 
-        delayLine.processDelay(outData, 0, 0);
+        //outData=delayLine.processDelay(outData, 3, 3);
 
+        //Queste linee bypassano tutta la convoluzione con crossfade
+        /*for (int i = 0; i < buffSize; i++)
+        {
+            outData[0][i] = (float)data[i].Re;
+            outData[1][i] = (float)data[i].Re;
+        }*/
+
+        outData=delayLine.processDelay(outData, (int)delays[0], (int)delays[1]);
+        
         return outData;
     }
 
+    /*public float[][] getFromBuffer(Complex[] data, Complex[][] hrtfs)
+    {
+        return getFromBuffer(data, hrtfs, new float[]{0,0});
+    }*/
+
     public float[][] getFromBuffer(Complex[] data, Complex[][] hrtfs, bool writeTestFile)
     {
-        float[][] outData = getFromBuffer(data, hrtfs);
+        float[][] outData = getFromBuffer(data, hrtfs, new float[]{0,0});
         return outData;
     }
 

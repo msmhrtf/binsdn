@@ -23,7 +23,9 @@ public class SDN : MonoBehaviour
 
     public bool enableListen = true;
     public bool doLateReflections = true; //Calculate late Reflections?
-    public bool applyHrtfReflections = true; //apply HRTF filter to reflections and directSound?
+    public bool applyHrtfToDirectSound = true; //apply HRTF filter to reflections and directSound?
+
+    public bool applyHrtfToReflections = true; //apply HRTF filter to reflections and directSound?
 
     public float volumeGain = 1.0f;
 
@@ -77,6 +79,7 @@ public class SDN : MonoBehaviour
     private float[][] sampOLA = new float[2][];
     // zero padded hrtfs
     private Complex[][] hrtf = new Complex[2][];
+    private float[] directItds = new float[2];
     // hrtf from HRTFmanager
     private Complex[][] hrtf_C = new Complex[2][];
     // convolution output buffers
@@ -85,7 +88,12 @@ public class SDN : MonoBehaviour
     // junctions HRTF convolution variables
     private List<Complex[]> junctionsSamps;
     private List<Complex[][]> Jhrtf_C;
-    private List<Complex[][]> Jhrtf;
+
+    //Junction HRTFS
+    private List<HRTFData> JhrtfData;
+    //private List<Complex[][]> Jhrtf;
+    //private List<float[]> JItds;
+    
     //private List<float[][]> Jbig_result;
     private List<float[][]> Jresult;
 
@@ -177,7 +185,8 @@ public class SDN : MonoBehaviour
         junctionsSamps = new List<Complex[]>();
         Jresult = new List<float[][]>();
         Jhrtf_C = new List<Complex[][]>();
-        Jhrtf = new List<Complex[][]>();
+        //Jhrtf = new List<Complex[][]>();
+        JhrtfData = new List<HRTFData>();
 
         // junctions ffts
         for (int i = 0; i < Jffts.Length; i++)
@@ -213,10 +222,12 @@ public class SDN : MonoBehaviour
 
         // get HRTFs from HRTFmanager
             hrtf = this.gameObject.GetComponent<HRTFmanager>().getHrftDirect();   // TO DO: update only if move
-
+            directItds = this.gameObject.GetComponent<HRTFmanager>().getItdsDirect();
         //Debug.Log(junctionsSamps.Count);
         if(junctionsSamps.Count == this.gameObject.GetComponent<HRTFmanager>().hrtf_nodes.Count){
-            Jhrtf = this.gameObject.GetComponent<HRTFmanager>().hrtf_nodes;
+            JhrtfData = this.gameObject.GetComponent<HRTFmanager>().hrtf_nodes;
+            //Jhrtf = this.gameObject.GetComponent<HRTFmanager>().hrtf_nodes;
+            //JItds = this.gameObject.GetComponent<HRTFmanager>().itds_nodes;
         }else{
             Debug.Log("Warning: Wrong number of walls");
             Debug.Log("Junction Samples : " + junctionsSamps.Count);
@@ -466,7 +477,7 @@ public class SDN : MonoBehaviour
                         Jffts[0][i] = new Complex(outSamples.Dequeue(), 0);  //Carico i samples
                     }
 
-                    convHRTF_Crossfade(applyHrtfReflections);
+                    convHRTF_Crossfade(applyHrtfToDirectSound, applyHrtfToReflections);
 
                     interleaveData(result, Jresult, data, channels);
                     //interleaveSimple(result, data, channels);
@@ -585,14 +596,14 @@ public class SDN : MonoBehaviour
     CrossfadeBuffer circBuffer;
     List<CrossfadeBuffer> juncCircBuffer = new List<CrossfadeBuffer>();
     
-    private void convHRTF_Crossfade(bool doIt)
+    private void convHRTF_Crossfade(bool doDirectHRTF,bool doReflectionHRTF)
     {
         //Copia la funziona hrtf corretta
         hrtf_C = CopyArrayLinq(hrtf);       // TO DO: copy only if moving
 
-        if (doIt)
+        if (doDirectHRTF)
         {
-            result = circBuffer.getFromBuffer(Jffts[0], hrtf_C);
+            result = circBuffer.getFromBuffer(Jffts[0], hrtf_C, directItds);
         }
         else
         { //Copy sample as-is without HRTF calculation
@@ -608,9 +619,10 @@ public class SDN : MonoBehaviour
 
         //Non sempre i juncSampls coincidono, poiche' il numero di muri viene aggiunto "on the fly"
         //bisognerebbe aggiungere un semaphore quando vengono ricalcolate le riflessioni sui muri
+        
         for (int i = 0; i < junctionsSamps.Count; i++)
         {
-            Jhrtf_C[i] = CopyArrayLinq(Jhrtf[i]);
+            Jhrtf_C[i] = CopyArrayLinq(JhrtfData[i].HRTFs);   //Giusto?
         //}
         // same thing for junctions --- qui vengono fatte le altre 6 convoluzioni
                 // reinitialize for next junction
@@ -623,10 +635,11 @@ public class SDN : MonoBehaviour
                 Array.Copy(junctionsSamps[i], Jffts[0], buffSize);
 
 
-            if (doIt)
+            if (doReflectionHRTF)
             {
                 try{
-                    Jresult[i] = juncCircBuffer[i].getFromBuffer(Jffts[0], Jhrtf_C[i]);
+                    //Jresult[i] = juncCircBuffer[i].getFromBuffer(Jffts[0], Jhrtf_C[i], JItds[i]);
+                    Jresult[i] = juncCircBuffer[i].getFromBuffer(Jffts[0], Jhrtf_C[i], JhrtfData[i].Delays);
                 }
                 catch (Exception e)
                 {
@@ -677,6 +690,7 @@ public class SDN : MonoBehaviour
         positionArray.RemoveAt(index);
         this.gameObject.GetComponent<HRTFmanager>().azEl.RemoveAt(index);
         this.gameObject.GetComponent<HRTFmanager>().hrtf_nodes.RemoveAt(index);
+        //this.gameObject.GetComponent<HRTFmanager>().itds_nodes.RemoveAt(index);
 
         // junction manager
         junctionsSamps.RemoveAt(index);
@@ -686,6 +700,7 @@ public class SDN : MonoBehaviour
         //ROBA MIA
         juncCircBuffer.RemoveAt(index);
     }
+
 
     private void addHRTFmanager(UnityEngine.Vector3 nodePos) // updates (add) list of azi/ele, database indices, and initialize hrtfs jagged array
     {
@@ -697,9 +712,11 @@ public class SDN : MonoBehaviour
         for (int i = 0; i < 2; i++) //Creo il buffer per lo stereo
         {
             complexEmptyBuff[i] = new Complex[fftLength];
-            complexEmptyBuff2[i] = new Complex[fftLength]; //Si può togliere?
+            complexEmptyBuff2[i] = new Complex[fftLength];
             floatEmptyBuff[i] = new float[buffSize];
         }
+
+        
 
         // hrtf manager
         positionArray.Add(nodePos);
@@ -707,7 +724,12 @@ public class SDN : MonoBehaviour
         int[] ind = this.gameObject.GetComponent<HRTFmanager>().getIndices(aziEle[0], aziEle[1]);
 
         this.gameObject.GetComponent<HRTFmanager>().azEl.Add(aziEle);
-        this.gameObject.GetComponent<HRTFmanager>().hrtf_nodes.Add(complexEmptyBuff);
+
+        HRTFData tmp = new HRTFData();
+        tmp.HRTFs = complexEmptyBuff;
+        tmp.Delays = new float[] {0,0};
+
+        this.gameObject.GetComponent<HRTFmanager>().hrtf_nodes.Add(tmp);
 
         // junction manager
         junctionsSamps.Add(new Complex[fftLength]);

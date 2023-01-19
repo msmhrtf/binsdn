@@ -36,8 +36,12 @@ public class HRTFmanager : MonoBehaviour
 
     // HRTF pairs for direct sound and junctions. updating if position of source, listener and listener's head rotation is changing.
     private AForge.Math.Complex[][] hrtf_direct = new AForge.Math.Complex[2][];
-    public List<AForge.Math.Complex[][]> hrtf_nodes = new List<AForge.Math.Complex[][]>(); // dynamic list of hrtf, following "network" in SDN script
-                                   
+    private float[] itds_direct = new float[2];
+    //public List<AForge.Math.Complex[][]> hrtf_nodes = new List<AForge.Math.Complex[][]>(); // dynamic list of hrtf, following "network" in SDN script
+    public List<HRTFData> hrtf_nodes = new List<HRTFData>(); //list of HRTF nodes
+    //NEW
+    //public List<float[]> itds_nodes = new List<float[]>(); // dynamic list of itds, following "network" in SDN script
+
     private float[] f_axis; // frequency axis
 
     private float[] azEl_direct = new float[2]; // interaural coordinate system
@@ -94,8 +98,18 @@ public class HRTFmanager : MonoBehaviour
 
             // DIRECT path azi/ele update
             azEl_direct = getAzElInteraural(this.gameObject.transform.position);
-            hrtf_direct = listener.GetComponent<SDNEnvConfig>().getInterpolated_HRTF(azEl_direct);
+            
+            HRTFData tmp = listener.GetComponent<SDNEnvConfig>().getInterpolated_HRTFDatas(azEl_direct);
+            //Debug.Log("Direct Azimuth: " + azEl_direct[0] + " Elevation: " + azEl_direct[1] + " Elevation 1: " + azEl_direct[2]);
+            //Debug.Log("Direct Azimuth: " + azEl_direct[0] + " ITD: " +  listener.GetComponent<SDNEnvConfig>().getSphericalHeadItd(azEl_direct));
+            //float[] temp = listener.GetComponent<SDNEnvConfig>().getInterpolated_ITDs(azEl_direct);
+            //Debug.Log("AziEle:" + (int)azEl_direct[0] + " #:" +  (int)temp[0] + "-" + (int)temp[1]);
 
+
+            //hrtf_direct = listener.GetComponent<SDNEnvConfig>().getInterpolated_HRTF(azEl_direct);
+            //itds_direct = listener.GetComponent<SDNEnvConfig>().getInterpolated_ITDs(azEl_direct);
+            hrtf_direct = tmp.HRTFs;
+            itds_direct = tmp.Delays;
             // JUNCTIONS azi/ele update
             positionArray = this.gameObject.GetComponent<SDN>().positionArray;
             if (positionArray.Count > 0)
@@ -103,11 +117,20 @@ public class HRTFmanager : MonoBehaviour
                 // constantly go through the list and update azi and ele
                 for (int i = 0; i < 2; i++) // Parallel.For(0, positionArray.Count, i => //
                 {
+                    try{//Forse non serve più?
                     azEl[i] = getAzElInteraural(positionArray[i]);
 
-                    // get hrtfs from database
-                    hrtf_nodes[i] = listener.GetComponent<SDNEnvConfig>().getInterpolated_HRTF(azEl[i]);
-
+                    // get hrtfs and ITDs from database
+                    //hrtf_nodes[i] = listener.GetComponent<SDNEnvConfig>().getInterpolated_HRTF(azEl[i]);
+                    hrtf_nodes[i] = listener.GetComponent<SDNEnvConfig>().getInterpolated_HRTFDatas(azEl[i]);
+                    //int[] inds = listener.GetComponent<SDNEnvConfig>().getIndices(azEl[i][0], azEl[i][1]);
+                    
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.Log("Warning: Some unexpected reposition Happened?");
+                    }
+                    //itds_nodes[i] = listener.GetComponent<SDNEnvConfig>().getInterpolated_ITDs(azEl[i]);
                 }
 
 
@@ -320,6 +343,8 @@ public class HRTFmanager : MonoBehaviour
         return azEl;
     }
 
+    
+
     public float[] cart2sph(float x, float y, float z) // cartesian to spherical. based on matlab function.
                                                        // returns angles in degrees.
     {
@@ -377,6 +402,10 @@ public class HRTFmanager : MonoBehaviour
     public AForge.Math.Complex[][] getHrftDirect()
     {
         return hrtf_direct;
+    }
+
+    public float[] getItdsDirect(){
+        return itds_direct;
     }
 
     public float[] getAzElDirect()

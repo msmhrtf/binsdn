@@ -22,12 +22,14 @@ public class VariableDelayLine{
         int bufferSize = input.Length;
 
         float numerator = bufferSize - 1;
-        float denominator = bufferSize - 1 + newDelay + delayBuffer.Length;
+        float denominator = bufferSize - 1 + newDelay - delayBuffer.Length;
         float compressionFactor = numerator / denominator;
 
         //Add samples from buffer at the start of the outputBuffer
+
+        
         for(int i = 0; i < delayBuffer.Length; i++){
-            input[i] += delayBuffer[i];
+            outputBuffer[i] = delayBuffer[i];
         }
 
         //Add samples from input until end of the outputBuffer
@@ -46,31 +48,41 @@ public class VariableDelayLine{
             }
         }
         else{   //else apply the compression/expansion algorithm
-            int j = 0;
-            float rest = 0;
+            int j;
+            float rest;
             //last sample must be treated in different way
-            int forLoopEnd = (newDelay==0)?(outputBuffer.Length-1):outputBuffer.Length;
+            int forLoopEnd;
+            if(newDelay==0){ forLoopEnd = input.Length -1;}else{
+                forLoopEnd = input.Length;
+            }
             float position = 0;
 
             for(int i = delayBuffer.Length; i < forLoopEnd; i++){
                 j = (int)position;
                 rest = position - j;
-                outputBuffer[i] = (1-rest)*input[j] + rest*input[j+1];
+                outputBuffer[i] = (1.0f-rest)*input[j] + (0.0f+rest)*input[j+1];
                 position += compressionFactor;
             }
 
-            //last sample
+            //The last loop iteration must be addressed in a special way if newDelay = 0 (part 2)
             if(newDelay==0){
                 outputBuffer[outputBuffer.Length-1] = input[input.Length-1];
                 clearDelay();
             }
             else{
-                for(int i = 0; i < newDelay; i++){
+                //int tempdelBuffLength = delayBuffer.Length;
+                delayBuffer = new float[newDelay];
+                for(int i = 0; i < newDelay - 1; i++){
                     j = (int)position;
                     rest = position - j;
-                    delayBuffer[i] = (1-rest)*input[j] + rest*input[j+1];
+                    //Debug.Log("Delay: " + newDelay + " i: " + i + " j: " + j + " rest: " + rest + " CompressionFactor: " + compressionFactor + " position: " + position + "oldDelBuff" + tempdelBuffLength);
+                    float a = (1.0f-rest)*input[j];
+                    float b = (0.0f+rest)*input[j+1];
+                    //delayBuffer[i] = (1-rest)*input[j] + rest*input[j+1];
+                    delayBuffer[i] = a + b;
                     position += compressionFactor;
                 }
+                delayBuffer[delayBuffer.Length-1] = input[input.Length-1];
             }
         }
 

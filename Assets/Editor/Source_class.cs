@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(SourceBuilder))]
+[System.Serializable]
 public class Source_class: Editor
 {
 

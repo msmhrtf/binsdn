@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 
 [CustomEditor(typeof(SDNEnvConfig))]
+[System.Serializable]
 public class SDNEnv_class: Editor
 {
 
@@ -56,6 +58,11 @@ public class SDNEnv_class: Editor
         }
         if(!myTarget.UseNewestSubject){
             myTarget.CIPIC = EditorGUILayout.TextField("Subject ID (CIPIC): ", myTarget.CIPIC);
+        }
+
+        if (GUI.changed)
+        {
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
 
     }

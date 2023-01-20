@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 
 [CustomEditor(typeof(WallFiltAndGain))]
-[CanEditMultipleObjects]
+[System.Serializable]
 public class Wall_class: Editor
 {
     string[] options;
@@ -12,16 +13,13 @@ public class Wall_class: Editor
     // Start is called before the first frame update
     void OnEnable()
     {
+//        WallFiltAndGain myTarget = (WallFiltAndGain)target;
         options = AudioMaterials.getMaterialList();
+//        Debug.Log("options: " + myTarget.wall_material);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
-    enum walltypes {concrete, carpet, glass, gypsum, vynil, wood, rockfon};
+    //enum walltypes {concrete, carpet, glass, gypsum, vynil, wood, rockfon};
 
     public override void OnInspectorGUI()
     {
@@ -43,6 +41,11 @@ public class Wall_class: Editor
 
         
         myTarget.wall_material = options[EditorGUILayout.Popup("Wall Material", index,options)];
+
+        if (GUI.changed)
+        {
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+        }
         
     }
 }

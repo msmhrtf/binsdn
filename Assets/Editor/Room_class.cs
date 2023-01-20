@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(RoomBuilder))]
+[System.Serializable]
 public class Room_class: Editor
 {
 

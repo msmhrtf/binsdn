@@ -63,7 +63,7 @@ public class SDN : MonoBehaviour
     private bool haveNewReflections = false;
     private bool doClear = false;
 
-    public bool debugThisSource = false;
+    //public bool debugThisSource = false;
 
     //private Mutex sampleMX;
     private Mutex networkMX;

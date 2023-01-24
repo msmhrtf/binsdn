@@ -88,8 +88,14 @@ public class SDNEnvConfig : MonoBehaviour
             Debug.Log("Using your Persistend Data Path-->" + Application.persistentDataPath);
         }
 
+        // HRTF selection -> generic or personalised
+        if (!UsePersonalizedSDN)
+        {
+            CIPIC = "165";
+        }
+
         //if use persistentdatapath get newest directory inside and print it
-        if(UsePersistentDataPath && UseNewestSubject){
+        if(UsePersistentDataPath && UseNewestSubject && !UsePersonalizedSDN){
             string[] dirs = Directory.GetDirectories(Application.persistentDataPath);
             string newestDir = dirs[0];
             foreach(string dir in dirs){
@@ -135,16 +141,7 @@ public class SDNEnvConfig : MonoBehaviour
             }
         }
 
-        // HRTF selection -> generic or personalised
 
-        if (UsePersonalizedSDN)
-        {
-            cipic_subject = CIPIC;
-            if (cipic_subject == "165")
-                Debug.Log("NEED A PERSONALISED HRTF DATASET ! CHANGE IN SUBJECT_INFO.");
-        }
-        else
-            cipic_subject = "165"; // KEMAR HATS with small pinnae
 
 
         string textFile; // 2d text file containing left and right hrtfs for a specific azimuth

@@ -47,19 +47,22 @@ public class SDNEnv_class: Editor
         myTarget.BufferSize = int.Parse(buffers[EditorGUILayout.Popup("Buffer Size", indexbs,buffers)]);
         myTarget.SystemSampleRate = int.Parse(sampleRates[EditorGUILayout.Popup("Sample Rate", indexsr,sampleRates)]);
 
-        int indexTF = myTarget.UsePersistentDataPath?1:0;
-        indexTF = EditorGUILayout.Popup("HRTF location:", indexTF,idSource);
-        myTarget.UsePersistentDataPath = (indexTF==1?true:false);
+        myTarget.UsePersonalizedSDN = EditorGUILayout.Toggle("Use Personalised SDN", myTarget.UsePersonalizedSDN);
 
-        if(myTarget.UsePersistentDataPath){
-            myTarget.UseNewestSubject = EditorGUILayout.Toggle("Use Newest Subject", myTarget.UseNewestSubject);
-        }else{
-            myTarget.UseNewestSubject = false;
-        }
-        if(!myTarget.UseNewestSubject){
-            myTarget.CIPIC = EditorGUILayout.TextField("Subject ID (CIPIC): ", myTarget.CIPIC);
-        }
+        if(myTarget.UsePersonalizedSDN){
+            int indexTF = myTarget.UsePersistentDataPath?1:0;
+            indexTF = EditorGUILayout.Popup("HRTF location:", indexTF,idSource);
+            myTarget.UsePersistentDataPath = (indexTF==1?true:false);
 
+            if(myTarget.UsePersistentDataPath){
+                myTarget.UseNewestSubject = EditorGUILayout.Toggle("Use Newest Subject", myTarget.UseNewestSubject);
+            }else{
+                myTarget.UseNewestSubject = false;
+            }
+            if(!myTarget.UseNewestSubject){
+                myTarget.CIPIC = EditorGUILayout.TextField("Subject ID (CIPIC): ", myTarget.CIPIC);
+            }
+        }
         if (GUI.changed)
         {
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());

@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/Calibration.unity
+- path: Assets/Scenes/CalibrationScene.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

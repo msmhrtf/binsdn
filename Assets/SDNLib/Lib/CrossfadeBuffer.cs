@@ -230,16 +230,16 @@ public class CrossfadeBuffer
         for (int i = 0; i < overlap; i++)
         {
           
-            //outData[0][i] = (outBuffer[0][i]) + (float)tempWindow[3][i].Re * window[overlap + i] + (float)tempWindow[1][i].Re * window[i];
-            //outData[1][i] = (outBuffer[1][i]) + (float)tempWindow[4][i].Re * window[overlap + i] + (float)tempWindow[2][i].Re * window[i];
+            outData[0][i] = (outBuffer[0][i]) + (float)tempWindow[3][i].Re * window[overlap + i] + (float)tempWindow[1][i].Re * window[i];
+            outData[1][i] = (outBuffer[1][i]) + (float)tempWindow[4][i].Re * window[overlap + i] + (float)tempWindow[2][i].Re * window[i];
 
             //Prova errata
             //outData[0][i] = (float)tempWindow[3][i].Re * window[overlap + i] + ((float)tempWindow[1][i].Re + outBuffer[0][i]) * window[i];
             //outData[1][i] = (float)tempWindow[4][i].Re * window[overlap + i] + ((float)tempWindow[2][i].Re + outBuffer[1][i]) * window[i];
 
             //Provo a mettere il buffer alla fine
-            outData[0][i] = (outBuffer[0][i]) + (float)tempWindow[1][i].Re * window[i];
-            outData[1][i] = (outBuffer[1][i]) + (float)tempWindow[2][i].Re * window[i];
+            //outData[0][i] = (outBuffer[0][i]) + (float)tempWindow[1][i].Re * window[i];
+            //outData[1][i] = (outBuffer[1][i]) + (float)tempWindow[2][i].Re * window[i];
 
 
 
@@ -300,8 +300,8 @@ public class CrossfadeBuffer
         for (int i = 0; i < overlap; i++)
         {
 
-            outData[0][i] = (outBuffer[0][i]) + (float)tempWindow[3][i].Re * window[overlap + i] + outData[0][i] * window[i];
-            outData[1][i] = (outBuffer[1][i]) + (float)tempWindow[4][i].Re * window[overlap + i] + outData[1][i] * window[i];
+            //outData[0][i] = (outBuffer[0][i]) + (float)tempWindow[3][i].Re * window[overlap + i] + outData[0][i] * window[i];
+            //outData[1][i] = (outBuffer[1][i]) + (float)tempWindow[4][i].Re * window[overlap + i] + outData[1][i] * window[i];
 
           
             //outData[0][i] = (float)tempWindow[3][i].Re * window[overlap + i] + outData[0][i] * window[i];
